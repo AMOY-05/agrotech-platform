@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request
+from fastapi.responses import PlainTextResponse
 from app.services.telegram_service import (
     send_message,
     send_typing_action,
@@ -11,40 +12,15 @@ from app.services.voice_service import (
     process_voice_message
 )
 from app.agent.agent import run_agent
-from loguru import logger
 from app.core.config import settings
-import json
+from loguru import logger
 import httpx
+import json
 
 router = APIRouter()
 
 # In-memory language prefs (Redis in production)
 _telegram_prefs: dict = {}
-
-WELCOME_MESSAGE = """🌾 *Welcome to AgroTech Intelligence!*
-
-I'm AgroBot, your AI farming assistant for Nigerian farmers.
-
-I can help you with:
-🐛 *Pest & disease detection*
-📊 *Crop yield prediction*
-💰 *Market price forecasting*
-📍 *Nearby agro-input stores*
-🌦️ *Weather-based farming advice*
-
-Just type your farming question!
-
-🌐 *Change language:*
-/language yoruba
-/language hausa
-/language igbo
-/language pidgin
-/language english
-
-🎤 Send a voice note and I'll understand it
-📸 Send a crop photo and I'll analyze it
-
-What would you like to know? 🌱"""
 
 HELP_MESSAGE = """*AgroBot Commands:*
 
@@ -53,7 +29,14 @@ HELP_MESSAGE = """*AgroBot Commands:*
 /language [lang] - Change response language
 /status - Check your farm context
 
-Just type your question naturally — no commands needed!"""
+Just type your question naturally — no commands needed!
+
+🌐 *Languages supported:*
+/language english
+/language yoruba
+/language hausa
+/language igbo
+/language pidgin"""
 
 
 def _get_pref(user_id: int) -> str:
@@ -66,45 +49,109 @@ def _set_pref(user_id: int, language: str):
     _telegram_prefs[user_id]["language"] = language
 
 
+async def send_welcome_with_button(chat_id: int):
+    """Sends welcome message with Open App button."""
+    if not settings.telegram_bot_token:
+        return
+
+    streamlit_url = getattr(
+        settings, "streamlit_app_url",
+        "https://agrotechintelligence.streamlit.app"
+    )
+
+    welcome_text = """🌾 *Welcome to AgroTech Intelligence!*
+
+I'm AgroBot, your AI farming assistant for Nigerian farmers.
+
+I can help you with:
+🐛 *Pest & disease detection*
+📊 *Crop yield prediction*
+💰 *Market price forecasting*
+📍 *Nearby agro-input stores*
+🌦️ *Weather-based farming advice*
+
+👇 *Open the full app or just type your question!*"""
+
+    keyboard = {
+        "inline_keyboard": [
+            [
+                {
+                    "text": "🌾 Open AgroTech App",
+                    "web_app": {"url": streamlit_url}
+                }
+            ],
+            [
+                {
+                    "text": "🌐 Change Language",
+                    "callback_data": "change_language"
+                },
+                {
+                    "text": "❓ Help",
+                    "callback_data": "help"
+                }
+            ]
+        ]
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(
+                f"https://api.telegram.org/bot{settings.telegram_bot_token}/sendMessage",
+                json={
+                    "chat_id": chat_id,
+                    "text": welcome_text,
+                    "parse_mode": "Markdown",
+                    "reply_markup": keyboard
+                }
+            )
+            if response.status_code != 200:
+                logger.error(f"Failed to send welcome button: {response.text}")
+                await send_message(chat_id, welcome_text)
+    except Exception as e:
+        logger.error(f"Failed to send welcome with button: {e}")
+        await send_message(chat_id, welcome_text)
+
+
 @router.post("/webhook", tags=["Telegram"])
 async def telegram_webhook(request: Request):
     """
     Receives all Telegram updates and routes them appropriately.
-    Handles text messages, voice notes, and photos.
+    Handles text messages, voice notes, photos and button callbacks.
     """
-    # Add after the message handler in telegram_webhook
-    callback_query = body.get("callback_query", {})
-    if callback_query:
-        callback_chat_id = callback_query.get("message", {}).get("chat", {}).get("id")
-        callback_data = callback_query.get("data", "")
-        callback_user_id = callback_query.get("from", {}).get("id")
-
-        # Answer the callback to remove loading state
-        async with httpx.AsyncClient(timeout=5.0) as client:
-            await client.post(
-                f"https://api.telegram.org/bot{settings.telegram_bot_token}/answerCallbackQuery",
-                json={"callback_query_id": callback_query.get("id")}
-            )
-
-        if callback_data == "help":
-            await send_message(callback_chat_id, HELP_MESSAGE)
-        elif callback_data == "change_language":
-            lang_message = """🌐 *Change Language*
-
-    Send one of these commands:
-    /language english
-    /language yoruba
-    /language hausa
-    /language igbo
-    /language pidgin"""
-            await send_message(callback_chat_id, lang_message)
-
-        return {"status": "ok"}
-
     try:
         body = await request.json()
         logger.info(f"Telegram update: {json.dumps(body)[:200]}")
 
+        # ── Handle Callback Queries (button clicks) ──
+        callback_query = body.get("callback_query", {})
+        if callback_query:
+            callback_chat_id = callback_query.get(
+                "message", {}
+            ).get("chat", {}).get("id")
+            callback_data = callback_query.get("data", "")
+
+            # Answer callback to remove loading spinner
+            async with httpx.AsyncClient(timeout=5.0) as client:
+                await client.post(
+                    f"https://api.telegram.org/bot{settings.telegram_bot_token}/answerCallbackQuery",
+                    json={"callback_query_id": callback_query.get("id")}
+                )
+
+            if callback_data == "help":
+                await send_message(callback_chat_id, HELP_MESSAGE)
+            elif callback_data == "change_language":
+                await send_message(callback_chat_id, """🌐 *Change Language*
+
+Send one of these commands:
+/language english
+/language yoruba
+/language hausa
+/language igbo
+/language pidgin""")
+
+            return {"status": "ok"}
+
+        # ── Handle Regular Messages ──
         message = body.get("message", {})
         if not message:
             return {"status": "ok"}
@@ -124,9 +171,7 @@ async def telegram_webhook(request: Request):
 
             # Commands
             if text == "/start":
-                streamlit_url = getattr(settings, "streamlit_app_url",
-                                    "https://your-app.streamlit.app")
-                await send_welcome_with_button(chat_id, streamlit_url)
+                await send_welcome_with_button(chat_id)
                 return {"status": "ok"}
 
             if text == "/help":
@@ -143,7 +188,10 @@ async def telegram_webhook(request: Request):
                     for k, v in filled.items():
                         status_text += f"• {k.replace('_', ' ').title()}: {v}\n"
                 else:
-                    status_text = "No farm context saved yet. Tell me about your farm!"
+                    status_text = (
+                        "No farm context saved yet. "
+                        "Tell me about your farm to get started!"
+                    )
                 await send_message(chat_id, status_text)
                 return {"status": "ok"}
 
@@ -152,10 +200,10 @@ async def telegram_webhook(request: Request):
             if new_lang:
                 _set_pref(user_id, new_lang)
                 confirmations = {
-                    "yoruba": f"✅ Ẹ káàbọ̀ {user_name}! Mo ti ṣeto èdè rẹ sí Yorùbá.",
-                    "hausa": f"✅ Sannu {user_name}! Na saita harshenka zuwa Hausa.",
-                    "igbo": f"✅ Ndewo {user_name}! Ahaziela asụsụ gị na Igbo.",
-                    "pidgin": f"✅ How far {user_name}! I don set your language to Pidgin.",
+                    "yoruba": f"✅ Mo ti ṣeto èdè rẹ sí Yorùbá, {user_name}!",
+                    "hausa": f"✅ Na saita harshenka zuwa Hausa, {user_name}!",
+                    "igbo": f"✅ Ahaziela asụsụ gị na Igbo, {user_name}!",
+                    "pidgin": f"✅ I don set your language to Pidgin, {user_name}!",
                     "english": f"✅ Language set to English, {user_name}!"
                 }
                 await send_message(
@@ -180,7 +228,6 @@ async def telegram_webhook(request: Request):
 
         # ── Photo ──
         elif "photo" in message:
-            # Telegram sends photos in multiple sizes — take the largest
             photos = message["photo"]
             largest_photo = max(photos, key=lambda p: p.get("file_size", 0))
             file_id = largest_photo.get("file_id")
@@ -191,7 +238,7 @@ async def telegram_webhook(request: Request):
                     chat_id, farmer_id, file_id, caption, preferred_language
                 )
 
-        # ── Document (audio file sent as document) ──
+        # ── Document (audio sent as file) ──
         elif "document" in message:
             doc = message["document"]
             mime = doc.get("mime_type", "")
@@ -205,15 +252,15 @@ async def telegram_webhook(request: Request):
             else:
                 await send_message(
                     chat_id,
-                    "I can analyze text, voice notes, and crop photos. "
+                    "I can analyze text, voice notes 🎤, and crop photos 📸. "
                     "Please send one of those! 🌾"
                 )
 
         else:
             await send_message(
                 chat_id,
-                "I can understand text messages, voice notes 🎤, and crop photos 📸. "
-                "What would you like help with?"
+                "I can understand text messages, voice notes 🎤, "
+                "and crop photos 📸. What would you like help with?"
             )
 
         return {"status": "ok"}
@@ -221,8 +268,6 @@ async def telegram_webhook(request: Request):
     except Exception as e:
         logger.error(f"Telegram webhook error: {e}")
         return {"status": "error"}
-    
-    
 
 
 async def _handle_text(
@@ -244,7 +289,6 @@ async def _handle_text(
         if preferred_language != "english":
             reply = await translate_response_to_language(reply, preferred_language)
 
-        # Add tool badges
         if tools_used:
             tool_labels = {
                 "detect_pest_disease": "🐛 Pest Analysis",
@@ -352,7 +396,9 @@ async def _handle_photo(
                 "low": "🟢", "medium": "🟡", "high": "🔴"
             }.get(urgency, "🟡")
 
-            symptoms_text = "\n".join(f"• {s}" for s in symptoms) if symptoms else ""
+            symptoms_text = "\n".join(
+                f"• {s}" for s in symptoms
+            ) if symptoms else ""
 
             reply = (
                 f"📸 *Crop Photo Analysis*\n\n"
@@ -381,9 +427,9 @@ async def _handle_photo(
         else:
             await send_message(
                 chat_id,
-                "⚠️ Could not analyze the photo. "
-                "Please send a clearer image of the affected crop area.\n\n"
-                "_Tip: Make sure the affected leaves or stems are clearly visible._"
+                "⚠️ Could not analyze the photo. Please send a clearer "
+                "image of the affected crop area.\n\n"
+                "_Tip: Make sure affected leaves or stems are clearly visible._"
             )
 
     except Exception as e:
@@ -394,20 +440,9 @@ async def _handle_photo(
         )
 
 
-@router.post("/webhook", tags=["Telegram"])
-async def telegram_webhook(request: Request):
-    # ngrok free tier fix
-    headers = dict(request.headers)
-    logger.info(f"Webhook headers: {headers.get('x-forwarded-for', 'no-forwarded')}")
-    logger.info(f"ngrok bypass: {headers.get('ngrok-skip-browser-warning', 'not-set')}")
-
 @router.get("/set-webhook", tags=["Telegram"])
 async def setup_webhook(webhook_url: str):
-    """
-    Convenience endpoint to set the Telegram webhook.
-    Call this once after deployment with your public URL.
-    Usage: GET /api/v1/telegram/set-webhook?webhook_url=https://your-domain.com
-    """
+    """Sets the Telegram webhook URL."""
     from app.services.telegram_service import set_webhook
     success = await set_webhook(webhook_url)
     if success:
@@ -417,59 +452,7 @@ async def setup_webhook(webhook_url: str):
 
 @router.get("/delete-webhook", tags=["Telegram"])
 async def remove_webhook():
-    """Removes the webhook (switches to polling mode for local testing)."""
+    """Removes the webhook."""
     from app.services.telegram_service import delete_webhook
     success = await delete_webhook()
     return {"status": "success" if success else "failed"}
-
-async def send_welcome_with_button(chat_id: int, streamlit_url: str):
-    """Sends welcome message with Open App button."""
-    if not settings.telegram_bot_token:
-        return
-
-    welcome_text = """🌾 *Welcome to AgroTech Intelligence!*
-
-I'm AgroBot, your AI farming assistant for Nigerian farmers.
-
-I can help you with:
-🐛 *Pest & disease detection*
-📊 *Crop yield prediction*
-💰 *Market price forecasting*
-📍 *Nearby agro-input stores*
-🌦️ *Weather-based farming advice*
-
-👇 *Open the full app below or just type your question!*"""
-
-    keyboard = {
-        "inline_keyboard": [[
-            {
-                "text": "🌾 Open AgroTech App",
-                "web_app": {"url": streamlit_url}
-            }
-        ], [
-            {
-                "text": "🌐 Change Language",
-                "callback_data": "change_language"
-            },
-            {
-                "text": "❓ Help",
-                "callback_data": "help"
-            }
-        ]]
-    }
-
-    try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            await client.post(
-                f"https://api.telegram.org/bot{settings.telegram_bot_token}/sendMessage",
-                json={
-                    "chat_id": chat_id,
-                    "text": welcome_text,
-                    "parse_mode": "Markdown",
-                    "reply_markup": keyboard
-                }
-            )
-    except Exception as e:
-        logger.error(f"Failed to send welcome with button: {e}")
-        # Fall back to plain welcome message
-        await send_message(chat_id, welcome_text)
