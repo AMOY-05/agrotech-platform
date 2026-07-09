@@ -61,3 +61,5 @@ Visit `http://localhost:8000/docs` for interactive API docs.
 ```bash
 pytest tests/ -v
 ```# agrotech-platform
+# agrotech-platform
+# agrotech-platform
