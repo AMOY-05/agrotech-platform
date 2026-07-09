@@ -12,7 +12,9 @@ from app.services.voice_service import (
 )
 from app.agent.agent import run_agent
 from loguru import logger
+from app.core.config import settings
 import json
+import httpx
 
 router = APIRouter()
 
@@ -70,6 +72,35 @@ async def telegram_webhook(request: Request):
     Receives all Telegram updates and routes them appropriately.
     Handles text messages, voice notes, and photos.
     """
+    # Add after the message handler in telegram_webhook
+    callback_query = body.get("callback_query", {})
+    if callback_query:
+        callback_chat_id = callback_query.get("message", {}).get("chat", {}).get("id")
+        callback_data = callback_query.get("data", "")
+        callback_user_id = callback_query.get("from", {}).get("id")
+
+        # Answer the callback to remove loading state
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            await client.post(
+                f"https://api.telegram.org/bot{settings.telegram_bot_token}/answerCallbackQuery",
+                json={"callback_query_id": callback_query.get("id")}
+            )
+
+        if callback_data == "help":
+            await send_message(callback_chat_id, HELP_MESSAGE)
+        elif callback_data == "change_language":
+            lang_message = """🌐 *Change Language*
+
+    Send one of these commands:
+    /language english
+    /language yoruba
+    /language hausa
+    /language igbo
+    /language pidgin"""
+            await send_message(callback_chat_id, lang_message)
+
+        return {"status": "ok"}
+
     try:
         body = await request.json()
         logger.info(f"Telegram update: {json.dumps(body)[:200]}")
@@ -93,7 +124,9 @@ async def telegram_webhook(request: Request):
 
             # Commands
             if text == "/start":
-                await send_message(chat_id, WELCOME_MESSAGE)
+                streamlit_url = getattr(settings, "streamlit_app_url",
+                                    "https://your-app.streamlit.app")
+                await send_welcome_with_button(chat_id, streamlit_url)
                 return {"status": "ok"}
 
             if text == "/help":
@@ -188,6 +221,8 @@ async def telegram_webhook(request: Request):
     except Exception as e:
         logger.error(f"Telegram webhook error: {e}")
         return {"status": "error"}
+    
+    
 
 
 async def _handle_text(
@@ -386,3 +421,55 @@ async def remove_webhook():
     from app.services.telegram_service import delete_webhook
     success = await delete_webhook()
     return {"status": "success" if success else "failed"}
+
+async def send_welcome_with_button(chat_id: int, streamlit_url: str):
+    """Sends welcome message with Open App button."""
+    if not settings.telegram_bot_token:
+        return
+
+    welcome_text = """🌾 *Welcome to AgroTech Intelligence!*
+
+I'm AgroBot, your AI farming assistant for Nigerian farmers.
+
+I can help you with:
+🐛 *Pest & disease detection*
+📊 *Crop yield prediction*
+💰 *Market price forecasting*
+📍 *Nearby agro-input stores*
+🌦️ *Weather-based farming advice*
+
+👇 *Open the full app below or just type your question!*"""
+
+    keyboard = {
+        "inline_keyboard": [[
+            {
+                "text": "🌾 Open AgroTech App",
+                "web_app": {"url": streamlit_url}
+            }
+        ], [
+            {
+                "text": "🌐 Change Language",
+                "callback_data": "change_language"
+            },
+            {
+                "text": "❓ Help",
+                "callback_data": "help"
+            }
+        ]]
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            await client.post(
+                f"https://api.telegram.org/bot{settings.telegram_bot_token}/sendMessage",
+                json={
+                    "chat_id": chat_id,
+                    "text": welcome_text,
+                    "parse_mode": "Markdown",
+                    "reply_markup": keyboard
+                }
+            )
+    except Exception as e:
+        logger.error(f"Failed to send welcome with button: {e}")
+        # Fall back to plain welcome message
+        await send_message(chat_id, welcome_text)

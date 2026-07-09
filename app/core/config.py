@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     # Telegram Bot
     telegram_bot_token: Optional[str] = None
     
+    streamlit_app_url: str = "https://agrotechintelligence.streamlit.app"
 
     model_config = {
         "env_file": Path(__file__).parent.parent.parent / ".env",
