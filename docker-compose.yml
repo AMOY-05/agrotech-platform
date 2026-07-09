@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  agrotech-api:
+    build: .
+    container_name: agrotech-api
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=AgroTech Intelligence Platform
+      - APP_VERSION=1.0.0
+      - DEBUG=False
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

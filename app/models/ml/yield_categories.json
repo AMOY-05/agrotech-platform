@@ -1,0 +1,27 @@
+{
+  "crop_type": [
+    "cassava",
+    "cowpea",
+    "maize",
+    "pepper",
+    "rice",
+    "tomato",
+    "yam"
+  ],
+  "region": [
+    "Bauchi",
+    "Benue",
+    "Kaduna",
+    "Kano",
+    "Lagos",
+    "Oyo",
+    "Plateau",
+    "Rivers"
+  ],
+  "soil_type": [
+    "clay",
+    "loamy",
+    "sandy",
+    "silty"
+  ]
+}

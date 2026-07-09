@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: agrotech-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: APP_NAME
+        value: AgroTech Intelligence Platform
+      - key: APP_VERSION
+        value: 1.0.0
+      - key: DEBUG
+        value: false
+      - key: GROQ_API_KEY
+        sync: false  # You'll enter this manually in Render dashboard
+      - key: OPENWEATHER_API_KEY
+        sync: false  # Same
