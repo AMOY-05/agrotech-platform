@@ -120,17 +120,22 @@ def _logout():
 
 # Check URL params for Google OAuth token
 if not st.session_state.authenticated:
-    params = st.query_params
-    if "token" in params and "farmer_id" in params:
-        _set_auth_state({
-            "access_token": params["token"],
-            "farmer_id": params["farmer_id"],
-            "full_name": params.get("name", "Farmer"),
-            "preferred_language": params.get("language", "english")
-        })
-        # Clear URL params
-        st.query_params.clear()
-        st.rerun()
+    try:
+        params = st.query_params
+        token = params.get("token", None)
+        farmer_id = params.get("farmer_id", None)
+
+        if token and farmer_id:
+            _set_auth_state({
+                "access_token": token,
+                "farmer_id": farmer_id,
+                "full_name": params.get("name", "Farmer"),
+                "preferred_language": params.get("language", "english")
+            })
+            st.query_params.clear()
+            st.rerun()
+    except Exception as e:
+        pass  # No params present, show auth page normally
 
 
 # ─────────────────────────────────────────────
