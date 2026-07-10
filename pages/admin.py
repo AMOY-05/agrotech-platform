@@ -17,6 +17,10 @@ st.set_page_config(
 
 # Simple admin password protection
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "agrotech_admin_2024")
+try:
+    ADMIN_PASSWORD = st.secrets.get("ADMIN_PASSWORD", ADMIN_PASSWORD)
+except Exception:
+    pass
 
 st.markdown("""
 <style>
@@ -172,3 +176,11 @@ with col2:
 
 if st.button("🔄 Refresh Dashboard"):
     st.rerun()
+
+
+# Hide sidebar navigation on admin page
+st.markdown("""
+<style>
+    [data-testid="stSidebarNav"] {display: none;}
+</style>
+""", unsafe_allow_html=True)

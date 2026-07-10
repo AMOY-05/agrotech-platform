@@ -18,6 +18,13 @@ st.set_page_config(
     layout="centered"
 )
 
+# Hide pages from sidebar navigation — admin is secret
+st.markdown("""
+<style>
+    [data-testid="stSidebarNav"] {display: none;}
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown("""
 <style>
     .main-header {
@@ -183,16 +190,17 @@ def show_auth_page():
     with tab1:
         st.markdown("### Welcome Back!")
 
-        st.markdown(f"""
-        <a href="{backend_url}/api/v1/auth/google" target="_self" class="google-btn">
-            🔵 &nbsp; Continue with Google
-        </a>
-        """, unsafe_allow_html=True)
+        # Google Login - temporarily disabled due to OAuth issues
+        #st.markdown(f"""
+        #<a href="{backend_url}/api/v1/auth/google" target="_self" class="google-btn">
+        #    🔵 &nbsp; Continue with Google
+        #</a>
+        #""", unsafe_allow_html=True)
 
-        st.markdown(
-            '<div class="divider-text">── or login with email ──</div>',
-            unsafe_allow_html=True
-        )
+        #st.markdown(
+        #    '<div class="divider-text">── or login with email ──</div>',
+        #    unsafe_allow_html=True
+        #)
 
         login_email = st.text_input(
             "Email", key="login_email",
@@ -234,16 +242,17 @@ def show_auth_page():
     with tab2:
         st.markdown("### Create Your Account")
 
-        st.markdown(f"""
-        <a href="{backend_url}/api/v1/auth/google" target="_self" class="google-btn">
-            🔵 &nbsp; Sign Up with Google
-        </a>
-        """, unsafe_allow_html=True)
+        #Google Sign Up - temporarily disabled due to OAuth issues
+        #st.markdown(f"""
+        #<a href="{backend_url}/api/v1/auth/google" target="_self" class="google-btn">
+        #    🔵 &nbsp; Sign Up with Google
+        #</a>
+        #""", unsafe_allow_html=True)
 
-        st.markdown(
-            '<div class="divider-text">── or sign up with email ──</div>',
-            unsafe_allow_html=True
-        )
+        #st.markdown(
+        #    '<div class="divider-text">── or sign up with email ──</div>',
+        #    unsafe_allow_html=True
+        #)
 
         full_name = st.text_input(
             "Full Name", key="signup_name",
