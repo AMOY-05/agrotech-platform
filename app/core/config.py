@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     # Google OAuth
     google_client_id: Optional[str] = None
     google_client_secret: Optional[str] = None
-    google_redirect_uri: str = "http://localhost:8000/api/v1/auth/google/callback"
+    google_redirect_uri: str = "https://agrotech-api-ooi0.onrender.com/api/v1/auth/google/callback"
 
     # Twilio WhatsApp
     twilio_account_sid: Optional[str] = None
