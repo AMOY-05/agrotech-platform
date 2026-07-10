@@ -136,7 +136,7 @@ async def google_login():
 
 @router.get("/google/callback", tags=["Authentication"])
 async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
-    """Handles Google OAuth callback — redirects to Streamlit with token."""
+    """Handles Google OAuth — returns auto-redirect HTML page."""
     if not settings.google_client_id:
         raise HTTPException(status_code=503, detail="Google OAuth not configured")
 
@@ -183,19 +183,83 @@ async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
         await db.commit()
 
         token = create_access_token({"sub": user.farmer_id, "email": user.email})
+        streamlit_url = getattr(
+            settings, "streamlit_app_url",
+            "https://agrotechintelligence.streamlit.app"
+        )
 
         logger.info(f"Google OAuth success: {email} → {user.farmer_id}")
 
-        # Redirect to Streamlit with token in URL parameter
-        streamlit_url = getattr(settings, "streamlit_app_url",
-                               "https://agrotechintelligence.streamlit.app")
-        redirect_url = f"{streamlit_url}?token={token}&farmer_id={user.farmer_id}&name={user.full_name}&language={user.preferred_language}"
+        # Return HTML page that stores token in localStorage
+        # then redirects to Streamlit
+        html_content = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>AgroTech — Logging you in...</title>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                        background: linear-gradient(135deg, #2d5a27, #4a9e3f);
+                        color: white;
+                        text-align: center;
+                    }}
+                    .container {{
+                        padding: 40px;
+                        border-radius: 15px;
+                        background: rgba(255,255,255,0.1);
+                    }}
+                    .spinner {{
+                        width: 50px;
+                        height: 50px;
+                        border: 5px solid rgba(255,255,255,0.3);
+                        border-top: 5px solid white;
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                        margin: 20px auto;
+                    }}
+                    @keyframes spin {{
+                        0% {{ transform: rotate(0deg); }}
+                        100% {{ transform: rotate(360deg); }}
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>🌾 AgroTech</h1>
+                    <div class="spinner"></div>
+                    <p>Welcome, {full_name}! Logging you in...</p>
+                    <p id="status">Redirecting to your dashboard...</p>
+                </div>
+                <script>
+                    // Store auth data in sessionStorage
+                    sessionStorage.setItem('agrotech_token', '{token}');
+                    sessionStorage.setItem('agrotech_farmer_id', '{user.farmer_id}');
+                    sessionStorage.setItem('agrotech_name', '{full_name}');
+                    sessionStorage.setItem('agrotech_language', '{user.preferred_language}');
 
-        return RedirectResponse(url=redirect_url)
+                    // Redirect to Streamlit with token in URL
+                    setTimeout(function() {{
+                        window.location.href = '{streamlit_url}?token={token}&farmer_id={user.farmer_id}&name={full_name}&language={user.preferred_language}';
+                    }}, 1500);
+                </script>
+            </body>
+            </html>
+            """
+        from fastapi.responses import HTMLResponse
+        return HTMLResponse(content=html_content)
 
     except Exception as e:
         logger.error(f"Google OAuth failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Google OAuth failed: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Google OAuth failed: {str(e)}"
+        )
 
 
 @router.get("/me", response_model=UserProfileResponse, tags=["Authentication"])

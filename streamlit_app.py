@@ -121,21 +121,39 @@ def _logout():
 # Check URL params for Google OAuth token
 if not st.session_state.authenticated:
     try:
-        params = st.query_params
-        token = params.get("token", None)
-        farmer_id = params.get("farmer_id", None)
+        # Try reading token from URL params
+        token = st.query_params.get("token")
+        farmer_id = st.query_params.get("farmer_id")
+        name = st.query_params.get("name", "Farmer")
+        language = st.query_params.get("language", "english")
 
         if token and farmer_id:
-            _set_auth_state({
-                "access_token": token,
-                "farmer_id": farmer_id,
-                "full_name": params.get("name", "Farmer"),
-                "preferred_language": params.get("language", "english")
-            })
-            st.query_params.clear()
-            st.rerun()
-    except Exception as e:
-        pass  # No params present, show auth page normally
+            # Verify token is valid by calling the API
+            try:
+                verify_response = requests.get(
+                    f"{API_BASE_URL}/auth/me",
+                    params={"token": token},
+                    timeout=10
+                )
+                if verify_response.status_code == 200:
+                    profile = verify_response.json()
+                    _set_auth_state({
+                        "access_token": token,
+                        "farmer_id": profile.get("farmer_id", farmer_id),
+                        "full_name": profile.get("full_name", name),
+                        "preferred_language": profile.get(
+                            "preferred_language", language
+                        )
+                    })
+                    st.query_params.clear()
+                    st.rerun()
+                else:
+                    # Token invalid — clear params and show login
+                    st.query_params.clear()
+            except Exception:
+                st.query_params.clear()
+    except Exception:
+        pass
 
 
 # ─────────────────────────────────────────────
