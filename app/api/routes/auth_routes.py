@@ -136,13 +136,12 @@ async def google_login():
 
 @router.get("/google/callback", tags=["Authentication"])
 async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
-    """Handles Google OAuth callback — exchanges code for user info."""
+    """Handles Google OAuth callback — redirects to Streamlit with token."""
     if not settings.google_client_id:
         raise HTTPException(status_code=503, detail="Google OAuth not configured")
 
     try:
         async with httpx.AsyncClient() as client:
-            # Exchange code for tokens
             token_response = await client.post(
                 "https://oauth2.googleapis.com/token",
                 data={
@@ -155,7 +154,6 @@ async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
             )
             token_data = token_response.json()
 
-            # Get user info from Google
             user_info_response = await client.get(
                 "https://www.googleapis.com/oauth2/v2/userinfo",
                 headers={"Authorization": f"Bearer {token_data['access_token']}"}
@@ -166,18 +164,13 @@ async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
         full_name = google_user.get("name", email.split("@")[0])
         google_id = google_user["id"]
 
-        # Check if user exists
         existing = await get_user_by_email(db, email)
-
         if existing:
-            # Update google_id if missing
             if not existing.google_id:
                 existing.google_id = google_id
                 await db.commit()
             user = existing
-            msg = f"Welcome back, {user.full_name}!"
         else:
-            # Create new user
             user = await create_user(
                 db=db,
                 email=email,
@@ -185,9 +178,7 @@ async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
                 auth_provider="google",
                 google_id=google_id
             )
-            msg = f"Welcome to AgroTech, {user.full_name}! Your farmer ID is {user.farmer_id}"
 
-        # Update last login
         user.last_login = datetime.utcnow()
         await db.commit()
 
@@ -195,41 +186,16 @@ async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
 
         logger.info(f"Google OAuth success: {email} → {user.farmer_id}")
 
-        # Return token info (in production, redirect to frontend with token)
-        return {
-            "success": True,
-            "access_token": token,
-            "token_type": "bearer",
-            "farmer_id": user.farmer_id,
-            "full_name": user.full_name,
-            "email": user.email,
-            "preferred_language": user.preferred_language,
-            "message": msg
-        }
+        # Redirect to Streamlit with token in URL parameter
+        streamlit_url = getattr(settings, "streamlit_app_url",
+                               "https://agrotechintelligence.streamlit.app")
+        redirect_url = f"{streamlit_url}?token={token}&farmer_id={user.farmer_id}&name={user.full_name}&language={user.preferred_language}"
+
+        return RedirectResponse(url=redirect_url)
 
     except Exception as e:
         logger.error(f"Google OAuth failed: {e}")
         raise HTTPException(status_code=500, detail=f"Google OAuth failed: {str(e)}")
-
-
-# --- Get Current User (Protected Route) ---
-async def get_current_user(
-    token: str,
-    db: AsyncSession = Depends(get_db)
-):
-    """Dependency: extracts and validates JWT token."""
-    payload = decode_token(token)
-    if not payload:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired token"
-        )
-    farmer_id = payload.get("sub")
-    from app.services.auth_service import get_user_by_farmer_id
-    user = await get_user_by_farmer_id(db, farmer_id)
-    if not user or not user.is_active:
-        raise HTTPException(status_code=401, detail="User not found or inactive")
-    return user
 
 
 @router.get("/me", response_model=UserProfileResponse, tags=["Authentication"])

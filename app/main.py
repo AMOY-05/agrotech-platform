@@ -18,7 +18,8 @@ from app.api.routes import (
     image_routes,
     voice_routes,
     whatsapp_routes,
-    telegram_routes
+    telegram_routes,
+    admin_routes
 )
 
 app = FastAPI(
@@ -60,6 +61,7 @@ app.include_router(image_routes.router, prefix="/api/v1/image")
 app.include_router(voice_routes.router, prefix="/api/v1/voice")
 app.include_router(whatsapp_routes.router, prefix="/api/v1/whatsapp")
 app.include_router(telegram_routes.router, prefix="/api/v1/telegram")
+app.include_router(admin_routes.router, prefix="/api/v1/admin")
 
 @app.on_event("startup")
 async def startup_event():
