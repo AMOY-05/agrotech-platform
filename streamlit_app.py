@@ -183,6 +183,19 @@ def show_auth_page():
     </div>
     """, unsafe_allow_html=True)
 
+    # --- Data Disclaimer Banner ---
+    st.markdown("""
+    <div style="background: #fff3cd; border-left: 4px solid #ffc107;
+        padding: 10px 15px; border-radius: 4px; margin-bottom: 15px;
+        font-size: 0.85em; color: #856404;">
+        ⚠️ <strong>Important:</strong> Price forecasts and yield predictions are 
+        estimated based on seasonal patterns and agronomic models. 
+        Always verify prices with your local market before making sell decisions.
+        <a href="#report-price" style="color: #856404; font-weight: bold;">
+        📊 Help us improve — report your local price below.</a>
+    </div>
+    """, unsafe_allow_html=True)
+
     backend_url = API_BASE_URL.replace("/api/v1", "")
 
     tab1, tab2 = st.tabs(["🔑 Login", "📝 Sign Up"])
@@ -460,6 +473,73 @@ with chat_container:
                 {"<br><br><small>" + tools_html + "</small>" if tools_html else ""}
             </div>
             """, unsafe_allow_html=True)
+
+
+# ─────────────────────────────────────────────
+# PRICE REPORTING SECTION
+# ─────────────────────────────────────────────
+
+with st.expander("📊 Report Your Local Market Price", expanded=False):
+    st.caption(
+        "Help improve AgroTech's price accuracy by reporting "
+        "what you actually see at your local market."
+    )
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        report_crop = st.selectbox(
+            "Crop",
+            ["tomato", "maize", "cassava", "rice", "yam",
+             "pepper", "cowpea", "plantain", "other"],
+            key="report_crop"
+        )
+    with col2:
+        report_region = st.text_input(
+            "Your Market/Region",
+            placeholder="e.g. Mile 12, Lagos",
+            key="report_region"
+        )
+    with col3:
+        report_price = st.number_input(
+            "Price (₦ per kg)",
+            min_value=1,
+            max_value=100000,
+            value=500,
+            key="report_price"
+        )
+
+    report_notes = st.text_input(
+        "Any notes? (optional)",
+        placeholder="e.g. price dropped due to harvest season",
+        key="report_notes"
+    )
+
+    if st.button("📤 Submit Price Report", key="submit_price_btn",
+                 use_container_width=True):
+        if report_region:
+            try:
+                response = requests.post(
+                    f"{API_BASE_URL}/prices/report",
+                    json={
+                        "crop_type": report_crop,
+                        "region": report_region,
+                        "price_ngn_per_kg": report_price,
+                        "farmer_id": st.session_state.farmer_id,
+                        "notes": report_notes
+                    },
+                    timeout=15
+                )
+                if response.status_code == 200:
+                    st.success(
+                        "✅ Thank you! Your price report helps other farmers "
+                        "make better decisions."
+                    )
+                else:
+                    st.error("❌ Could not submit report. Please try again.")
+            except Exception as e:
+                st.error(f"❌ Error: {e}")
+        else:
+            st.warning("⚠️ Please enter your market/region")
 
 
 # ─────────────────────────────────────────────

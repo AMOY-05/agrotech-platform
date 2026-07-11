@@ -152,6 +152,44 @@ except Exception as e:
 
 st.divider()
 
+st.divider()
+
+# ── Crowdsourced Price Reports ──
+st.markdown("## 📊 Crowdsourced Price Reports")
+st.caption("Real prices reported by farmers — use these to improve model accuracy")
+
+try:
+    reports_response = requests.get(
+        f"{API_BASE_URL}/prices/reports",
+        timeout=10
+    )
+    if reports_response.status_code == 200:
+        reports_data = reports_response.json()
+        reports = reports_data.get("reports", [])
+
+        if reports:
+            # Summary stats
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Total Reports", len(reports))
+            with col2:
+                crops_reported = len(set(r["crop_type"] for r in reports))
+                st.metric("Crops Covered", crops_reported)
+
+            # Reports table
+            import pandas as pd
+            df = pd.DataFrame(reports)
+            df = df[["crop_type", "region", "price_ngn_per_kg",
+                     "notes", "reported_at"]]
+            df.columns = ["Crop", "Region", "Price (₦/kg)",
+                         "Notes", "Reported At"]
+            df["Reported At"] = df["Reported At"].str[:16]
+            st.dataframe(df, use_container_width=True)
+        else:
+            st.info("No price reports yet. Encourage farmers to submit prices!")
+except Exception as e:
+    st.error(f"Could not fetch price reports: {e}")
+
 # ── Platform Health ──
 st.markdown("## 🟢 Platform Health")
 

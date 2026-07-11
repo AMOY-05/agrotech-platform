@@ -31,3 +31,19 @@ class User(Base):
 
     def __repr__(self):
         return f"<User {self.email} ({self.farmer_id})>"
+    
+
+class PriceReport(Base):
+    __tablename__ = "price_reports"
+
+    id = Column(Integer, primary_key=True, index=True)
+    farmer_id = Column(String, nullable=True)
+    crop_type = Column(String, nullable=False)
+    region = Column(String, nullable=False)
+    price_ngn_per_kg = Column(String, nullable=False)
+    notes = Column(String, nullable=True)
+    reported_at = Column(DateTime, default=datetime.utcnow)
+    is_verified = Column(Boolean, default=False)
+
+    def __repr__(self):
+        return f"<PriceReport {self.crop_type} ₦{self.price_ngn_per_kg}/kg @ {self.region}>"
