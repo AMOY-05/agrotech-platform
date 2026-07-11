@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Boolean, DateTime, Integer
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from datetime import datetime
 import uuid
 
@@ -10,11 +10,16 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    farmer_id = Column(String, unique=True, index=True, default=lambda: f"farmer_{uuid.uuid4().hex[:8]}")
+    farmer_id = Column(
+        String,
+        unique=True,
+        index=True,
+        default=lambda: f"farmer_{uuid.uuid4().hex[:8]}"
+    )
     email = Column(String, unique=True, index=True, nullable=False)
     full_name = Column(String, nullable=True)
-    hashed_password = Column(String, nullable=True)  # Null for OAuth users
-    auth_provider = Column(String, default="email")  # "email" or "google"
+    hashed_password = Column(String, nullable=True)
+    auth_provider = Column(String, default="email")
     google_id = Column(String, nullable=True, unique=True)
     preferred_language = Column(String, default="english")
     region = Column(String, nullable=True)

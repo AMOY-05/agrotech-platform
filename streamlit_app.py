@@ -222,7 +222,7 @@ def show_auth_page():
                             "email": login_email,
                             "password": login_password
                         },
-                        timeout=15
+                        timeout=60
                     )
                     if response.status_code == 200:
                         data = response.json()
@@ -292,7 +292,7 @@ def show_auth_page():
                             "password": signup_password,
                             "preferred_language": "english"
                         },
-                        timeout=15
+                        timeout=60
                     )
                     if response.status_code == 200:
                         data = response.json()

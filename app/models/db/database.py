@@ -1,18 +1,22 @@
-from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from app.models.db.user_model import Base
 from app.core.config import settings
 from loguru import logger
 
-# Use SQLite for development, PostgreSQL for production
-DATABASE_URL = getattr(settings, "database_url", "sqlite+aiosqlite:///./agrotech.db")
+# Use the DATABASE_URL from environment
+DATABASE_URL = settings.database_url
 
-# Async engine for FastAPI
+# Handle both SQLite (local dev) and PostgreSQL (production)
+connect_args = {}
+if "sqlite" in DATABASE_URL:
+    connect_args = {"check_same_thread": False}
+
 engine = create_async_engine(
     DATABASE_URL,
     echo=False,
-    future=True
+    future=True,
+    connect_args=connect_args
 )
 
 AsyncSessionLocal = sessionmaker(
