@@ -4,20 +4,19 @@ from app.models.db.user_model import Base
 from app.core.config import settings
 from loguru import logger
 
-# Use the DATABASE_URL from environment
 DATABASE_URL = settings.database_url
 
-# Handle both SQLite (local dev) and PostgreSQL (production)
-connect_args = {}
-if "sqlite" in DATABASE_URL:
-    connect_args = {"check_same_thread": False}
+# Build engine kwargs based on database type
+engine_kwargs = {
+    "echo": False,
+    "future": True,
+}
 
-engine = create_async_engine(
-    DATABASE_URL,
-    echo=False,
-    future=True,
-    connect_args=connect_args
-)
+# SQLite needs special connect args
+if "sqlite" in DATABASE_URL:
+    engine_kwargs["connect_args"] = {"check_same_thread": False}
+
+engine = create_async_engine(DATABASE_URL, **engine_kwargs)
 
 AsyncSessionLocal = sessionmaker(
     engine,
