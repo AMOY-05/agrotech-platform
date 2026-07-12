@@ -71,6 +71,14 @@ CROP_MAPPING = {
     "Watermelon": "watermelon",
     "Cucumber": "cucumber",
     "Carrot": "carrot",
+    "Okra": "okra",
+    "Garden egg": "garden_egg",
+    "Garden eggs": "garden_egg",
+    "Bitter leaf": "bitter_leaf",
+    "Ugu": "fluted_pumpkin",
+    "Pumpkin leaves": "fluted_pumpkin",
+    "Waterleaf": "waterleaf",
+    "Jute mallow": "jute_mallow",
 
     # ── Legumes & Pulses ──
     "Cowpeas": "cowpea",
@@ -98,12 +106,14 @@ CROP_MAPPING = {
     "Orange": "orange",
     "Oranges": "orange",
     "Pineapple": "pineapple",
+    "Pineapples": "pineapple",
     "Avocado": "avocado",
     "Papaya": "papaya",
     "Coconut": "coconut",
 
     # ── Cash Crops & Others ──
     "Palm oil": "palm_oil",
+    "Palm oil (crude)": "palm_oil",
     "Vegetable oil": "vegetable_oil",
     "Groundnut oil": "groundnut_oil",
     "Sugar": "sugar",
@@ -111,6 +121,9 @@ CROP_MAPPING = {
     "Cocoa": "cocoa",
     "Coffee": "coffee",
     "Cotton": "cotton",
+    "Rubber": "rubber",
+    "Coffee": "coffee",
+    "Sugarcane": "sugarcane",
 
     # ── Animal Products ──
     "Beef": "beef",
@@ -125,7 +138,121 @@ CROP_MAPPING = {
     # ── Processed Foods ──
     "Bread": "bread",
     "Noodles": "noodles",
+
+    # Spices
+    "Ginger": "ginger",
+    "Garlic": "garlic",
+    "Pepper (black)": "black_pepper",
+
+    # Other legumes
+    "Bambara nut": "bambara_nut",
+    "Pigeon pea": "pigeon_pea",
+    "Locust beans": "locust_bean",
+    "Sesame": "sesame",
+    "Sunflower": "sunflower",
+
+    # Processed
+    "Palm kernel oil": "palm_kernel_oil",
+    "Groundnut oil": "groundnut_oil",
+    "Shea butter": "shea",
+    "Gari": "gari",
+    "Fufu": "fufu",
 }
+# Add these to CROP_MAPPING (merge with existing)
+CROP_MAPPING_TIER2 = {
+    # Vegetables
+    "Okra": "okra",
+    "Garden egg": "garden_egg",
+    "Garden eggs": "garden_egg",
+    "Bitter leaf": "bitter_leaf",
+    "Pumpkin": "fluted_pumpkin",
+    "Pumpkin leaves": "fluted_pumpkin",
+    "Waterleaf": "waterleaf",
+    "Cabbage": "cabbage",
+    "Carrot": "carrot",
+    "Cucumber": "cucumber",
+    "Lettuce": "lettuce",
+    "Eggplant": "eggplant",
+
+    # Fruits
+    "Mango": "mango",
+    "Mangoes": "mango",
+    "Pineapple": "pineapple",
+    "Pineapples": "pineapple",
+    "Papaya": "papaya",
+    "Pawpaw": "papaya",
+    "Avocado": "avocado",
+    "Coconut": "coconut",
+    "Watermelon": "watermelon",
+
+    # Cash crops
+    "Palm oil (crude)": "palm_oil",
+    "Cocoa": "cocoa",
+    "Coffee": "coffee",
+    "Cotton": "cotton",
+    "Rubber": "rubber",
+    "Sugarcane": "sugarcane",
+    "Shea": "shea",
+
+    # Spices & condiments
+    "Ginger": "ginger",
+    "Garlic": "garlic",
+    "Pepper (black)": "black_pepper",
+    "Crayfish": "crayfish",
+    "Locust beans": "locust_bean",
+
+    # Other legumes & grains
+    "Pigeon pea": "pigeon_pea",
+    "Bambara nut": "bambara_nut",
+    "Sesame": "sesame",
+    "Sunflower": "sunflower",
+    "Soyabeans": "soybean",
+
+    # Processed
+    "Palm kernel oil": "palm_kernel_oil",
+    "Groundnut oil": "groundnut_oil",
+    "Vegetable oil": "vegetable_oil",
+    "Gari": "gari",
+    "Fufu": "fufu",
+    "Semovita": "semovita",
+
+    # Animal products
+    "Goat": "goat",
+    "Goat meat": "goat",
+    "Mutton": "mutton",
+    "Pork": "pork",
+    "Tilapia": "tilapia",
+    "Catfish": "catfish",
+    "Fish (smoked)": "smoked_fish",
+    "Milk (fresh)": "milk",
+    "Butter": "butter",
+}
+
+# Tier 2 OWID crop slugs to try
+OWID_CROPS_TIER2 = {
+    "plantain": "banana-plantains-yield",
+    "sweet_potato": "sweet-potato-yield",
+    "palm_oil": "oil-palm-fruit-yields",
+    "sugarcane": "sugar-cane-yields",
+    "cotton": "cotton-yields",
+    "sesame": "sesame-yield",
+    "groundnut": "groundnut-yields",
+    "sorghum": "sorghum-yields",
+    "millet": "millet-yields",
+    "yam": "yam-yield",
+    "cocoyam": "taro-yield",
+    "ginger": "ginger-yield",
+    "coffee": "coffee-yields",
+    "rubber": "natural-rubber-yield",
+    "soybean": "soybean-yields",
+    "okra": "okra-yield",
+    "pineapple": "pineapple-yield",
+    "mango": "mango-yield",
+    "avocado": "avocado-yield",
+    "coconut": "coconut-yield",
+    "watermelon": "watermelon-yield",
+}
+
 
 # All 36 Nigerian states + FCT with coordinates
 NIGERIAN_REGIONS = {
@@ -188,6 +315,14 @@ OWID_CROPS = {
     "palm_oil": "oil-palm-fruit-yields",
     "cotton": "cotton-yields",
     "coffee": "coffee-bean-yields",
+    "plantain": "plantain-and-banana-yields",
+    "sweet_potato": "sweet-potatoes-yield",
+    "palm_oil": "oil-palm-yield",
+    "sugarcane": "sugar-cane-yield",
+    "cotton": "cotton-yields",
+    "groundnut": "groundnut-yields",
+    "ginger": "ginger-yields",
+    "okra": "okra-yields",
 }
 
 
@@ -396,22 +531,157 @@ async def download_nasa_weather():
 
     return all_weather
 
+async def download_tier2_data():
+    """Downloads Tier 2 crop data and merges with existing."""
+    print("\n📥 Downloading Tier 2 crop data...")
+
+    # ── Step 1: Re-download WFP with expanded crop mapping ──
+    print("\n1. Expanding WFP crop coverage...")
+
+    async with httpx.AsyncClient(timeout=120.0, follow_redirects=True) as client:
+        response = await client.get(
+            "https://data.humdata.org/dataset/42db041f-7aaf-4ab4-961f-2a12096861e7"
+            "/resource/12b51155-0cd3-4806-9924-61ede4077591/download/wfp_food_prices_nga.csv",
+            headers={"User-Agent": "Mozilla/5.0 AgroTech-Research/1.0"}
+        )
+
+        if response.status_code == 200:
+            df = pd.read_csv(io.StringIO(response.text))
+
+            # Merge all crop mappings
+            full_mapping = {**CROP_MAPPING, **CROP_MAPPING_TIER2}
+            df["commodity_normalized"] = df["commodity"].map(full_mapping)
+            df = df.dropna(subset=["commodity_normalized"])
+            df = df[df["price"] > 0]
+            df = df[df["pricetype"].isin(["Retail", "Wholesale"])]
+
+            # Price caps for new crops
+            PRICE_CAPS_TIER2 = {
+                "palm_oil": 5000, "cocoa": 20000, "ginger": 5000,
+                "garlic": 8000, "okra": 3000, "mango": 2000,
+                "pineapple": 3000, "watermelon": 1000, "coconut": 2000,
+                "catfish": 5000, "tilapia": 4000, "goat": 10000,
+                "plantain": 1000, "sweet_potato": 1500
+            }
+
+            for crop, cap in PRICE_CAPS_TIER2.items():
+                mask = (
+                    (df["commodity_normalized"] == crop) &
+                    (df["price"] > cap)
+                )
+                df = df[~mask]
+
+            df_clean = df[[
+                "date", "admin1", "market", "commodity_normalized",
+                "commodity", "price", "usdprice", "pricetype",
+                "latitude", "longitude"
+            ]].copy()
+            df_clean.columns = [
+                "date", "state", "market", "crop_type",
+                "original_commodity", "price_ngn", "price_usd",
+                "price_type", "latitude", "longitude"
+            ]
+
+            output_path = DATA_DIR / "wfp_prices_nigeria.csv"
+            df_clean.to_csv(output_path, index=False)
+            print(f"✅ Updated WFP data: {len(df_clean)} records")
+            print(f"   Crops: {sorted(df_clean['crop_type'].unique())}")
+
+    # ── Step 2: Try OWID Tier 2 crops ──
+    print("\n2. Fetching Tier 2 yield data from OWID...")
+
+    # Load existing yield data
+    yield_file = DATA_DIR / "real_yields_nigeria.json"
+    if yield_file.exists():
+        with open(yield_file) as f:
+            existing_yields = json.load(f)
+    else:
+        existing_yields = {}
+
+    new_yields = 0
+    failed_yields = []
+
+    async with httpx.AsyncClient(timeout=60.0, follow_redirects=True) as client:
+        for crop, slug in OWID_CROPS_TIER2.items():
+            if crop in existing_yields:
+                print(f"  ⏭️  {crop}: already have data")
+                continue
+
+            try:
+                response = await client.get(
+                    f"https://ourworldindata.org/grapher/{slug}.csv",
+                    params={"country": "Nigeria"}
+                )
+
+                if response.status_code == 200:
+                    lines = [
+                        l for l in response.text.strip().split("\n")
+                        if "Nigeria" in l
+                    ]
+                    if lines:
+                        yields_by_year = {}
+                        for line in lines:
+                            parts = line.split(",")
+                            if len(parts) >= 4:
+                                try:
+                                    year = int(parts[2])
+                                    yield_kg = float(parts[3]) * 1000
+                                    yields_by_year[year] = round(yield_kg, 1)
+                                except ValueError:
+                                    continue
+
+                        if yields_by_year:
+                            existing_yields[crop] = yields_by_year
+                            recent = {
+                                k: v for k, v in yields_by_year.items()
+                                if k >= 2020
+                            }
+                            print(f"  ✅ {crop}: {recent}")
+                            new_yields += 1
+                        else:
+                            failed_yields.append(crop)
+                            print(f"  ⚠️  {crop}: no Nigeria data in response")
+                    else:
+                        failed_yields.append(crop)
+                        print(f"  ⚠️  {crop}: empty response")
+                else:
+                    failed_yields.append(crop)
+                    print(f"  ❌ {crop}: status {response.status_code} (slug: {slug})")
+
+            except Exception as e:
+                failed_yields.append(crop)
+                print(f"  ❌ {crop}: {e}")
+
+    # Save updated yields
+    with open(yield_file, "w") as f:
+        json.dump(existing_yields, f, indent=2)
+    print(f"\n✅ Yield data updated: {new_yields} new crops added")
+    print(f"   Total crops with real yield data: {len(existing_yields)}")
+
+    if failed_yields:
+        print(f"\n⚠️  No OWID data found for: {failed_yields}")
+        print("   These crops will use WFP price data + LLM knowledge fallback")
+
+    # ── Step 3: Summary ──
+    print("\n" + "="*50)
+    print("TIER 2 DATA SUMMARY")
+    print("="*50)
+    print(f"Price records: check wfp_prices_nigeria.csv")
+    print(f"Yield datasets: {len(existing_yields)} crops total")
+    print(f"Weather regions: 37 (unchanged)")
 
 async def main():
     print("🌾 AgroTech Real Data Pipeline")
     print("="*50)
 
+    # Full download (run once)
     prices_df = await download_wfp_prices()
     yields = await download_owid_yields()
     weather = await download_nasa_weather()
 
+    # Tier 2 expansion
+    await download_tier2_data()
+
     print("\n" + "="*50)
-    print("✅ ALL REAL DATA DOWNLOADED")
+    print("✅ ALL DATA DOWNLOADED")
     print("="*50)
-    print(f"📊 Price records: {len(prices_df) if prices_df is not None else 0}")
-    print(f"🌱 Crop yield datasets: {len(yields)}")
-    print(f"🌦️ Weather regions: {len(weather)}")
-    print("\nFiles saved to data/real/")
-
-
-asyncio.run(main())
