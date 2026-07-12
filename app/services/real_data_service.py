@@ -424,3 +424,41 @@ def get_real_weather_for_region(region: str, month: Optional[int] = None) -> Opt
                 "avg_annual_rainfall_mm": round(sum(rains), 1),
                 "avg_humidity_pct": round(
                     sum(humidity) / len(humidity), 1
+                ),
+                "monthly_breakdown": monthly,
+                "data_source": "NASA POWER (10-year historical average 2015-2024)",
+                "is_real_data": True
+            }
+
+    return None
+
+
+def get_data_quality_report() -> dict:
+    """Returns a summary of what real data is available."""
+    df = _load_price_data()
+    yields = _load_yield_data()
+    weather = _load_weather_data()
+
+    return {
+        "price_data": {
+            "available": df is not None,
+            "records": len(df) if df is not None else 0,
+            "crops": list(df["crop_type"].unique()) if df is not None else [],
+            "states": list(df["state"].unique()) if df is not None else [],
+            "date_range": {
+                "from": str(df["date"].min())[:10] if df is not None else None,
+                "to": str(df["date"].max())[:10] if df is not None else None
+            },
+            "source": "WFP Market Monitoring / HDX"
+        },
+        "yield_data": {
+            "available": yields is not None,
+            "crops": list(yields.keys()) if yields is not None else [],
+            "source": "Our World in Data / FAO"
+        },
+        "weather_data": {
+            "available": weather is not None,
+            "regions": list(weather.keys()) if weather is not None else [],
+            "source": "NASA POWER API (2015-2024)"
+        }
+    }
