@@ -1,0 +1,2444 @@
+{
+  "Lagos": {
+    "lat": 6.5244,
+    "lon": 3.3792,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 78.6
+      },
+      "2": {
+        "avg_temp_celsius": 27.4,
+        "avg_rainfall_mm": 1.0,
+        "avg_humidity_pct": 82.5
+      },
+      "3": {
+        "avg_temp_celsius": 27.8,
+        "avg_rainfall_mm": 2.8,
+        "avg_humidity_pct": 85.1
+      },
+      "4": {
+        "avg_temp_celsius": 27.8,
+        "avg_rainfall_mm": 3.7,
+        "avg_humidity_pct": 85.6
+      },
+      "5": {
+        "avg_temp_celsius": 27.4,
+        "avg_rainfall_mm": 5.0,
+        "avg_humidity_pct": 86.2
+      },
+      "6": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 8.8,
+        "avg_humidity_pct": 87.8
+      },
+      "7": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 6.4,
+        "avg_humidity_pct": 88.7
+      },
+      "8": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 3.8,
+        "avg_humidity_pct": 88.4
+      },
+      "9": {
+        "avg_temp_celsius": 25.6,
+        "avg_rainfall_mm": 8.5,
+        "avg_humidity_pct": 89.4
+      },
+      "10": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 7.2,
+        "avg_humidity_pct": 88.1
+      },
+      "11": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 2.9,
+        "avg_humidity_pct": 84.9
+      },
+      "12": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 77.9
+      }
+    }
+  },
+  "Kano": {
+    "lat": 12.0022,
+    "lon": 8.592,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 20.1,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 27.4
+      },
+      "2": {
+        "avg_temp_celsius": 23.1,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 22.0
+      },
+      "3": {
+        "avg_temp_celsius": 28.3,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 20.3
+      },
+      "4": {
+        "avg_temp_celsius": 30.8,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 28.7
+      },
+      "5": {
+        "avg_temp_celsius": 31.8,
+        "avg_rainfall_mm": 1.2,
+        "avg_humidity_pct": 44.1
+      },
+      "6": {
+        "avg_temp_celsius": 30.3,
+        "avg_rainfall_mm": 2.8,
+        "avg_humidity_pct": 55.0
+      },
+      "7": {
+        "avg_temp_celsius": 28.0,
+        "avg_rainfall_mm": 7.3,
+        "avg_humidity_pct": 66.5
+      },
+      "8": {
+        "avg_temp_celsius": 26.2,
+        "avg_rainfall_mm": 7.4,
+        "avg_humidity_pct": 76.9
+      },
+      "9": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 4.0,
+        "avg_humidity_pct": 73.0
+      },
+      "10": {
+        "avg_temp_celsius": 26.7,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 57.0
+      },
+      "11": {
+        "avg_temp_celsius": 23.6,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 41.3
+      },
+      "12": {
+        "avg_temp_celsius": 20.4,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 35.6
+      }
+    }
+  },
+  "Abuja": {
+    "lat": 9.0765,
+    "lon": 7.3986,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 24.9,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 38.5
+      },
+      "2": {
+        "avg_temp_celsius": 27.3,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 36.2
+      },
+      "3": {
+        "avg_temp_celsius": 29.0,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 54.7
+      },
+      "4": {
+        "avg_temp_celsius": 28.6,
+        "avg_rainfall_mm": 2.1,
+        "avg_humidity_pct": 64.7
+      },
+      "5": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 4.6,
+        "avg_humidity_pct": 77.3
+      },
+      "6": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 6.4,
+        "avg_humidity_pct": 83.6
+      },
+      "7": {
+        "avg_temp_celsius": 24.5,
+        "avg_rainfall_mm": 8.0,
+        "avg_humidity_pct": 86.5
+      },
+      "8": {
+        "avg_temp_celsius": 24.1,
+        "avg_rainfall_mm": 7.8,
+        "avg_humidity_pct": 87.9
+      },
+      "9": {
+        "avg_temp_celsius": 24.6,
+        "avg_rainfall_mm": 6.8,
+        "avg_humidity_pct": 86.8
+      },
+      "10": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 4.0,
+        "avg_humidity_pct": 82.0
+      },
+      "11": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 0.4,
+        "avg_humidity_pct": 64.2
+      },
+      "12": {
+        "avg_temp_celsius": 24.3,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 48.8
+      }
+    }
+  },
+  "Oyo": {
+    "lat": 7.3775,
+    "lon": 3.947,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 24.4,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 72.8
+      },
+      "2": {
+        "avg_temp_celsius": 26.0,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 78.2
+      },
+      "3": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 2.9,
+        "avg_humidity_pct": 85.7
+      },
+      "4": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 4.5,
+        "avg_humidity_pct": 87.8
+      },
+      "5": {
+        "avg_temp_celsius": 26.1,
+        "avg_rainfall_mm": 5.4,
+        "avg_humidity_pct": 89.1
+      },
+      "6": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 10.1,
+        "avg_humidity_pct": 90.1
+      },
+      "7": {
+        "avg_temp_celsius": 24.7,
+        "avg_rainfall_mm": 8.1,
+        "avg_humidity_pct": 90.2
+      },
+      "8": {
+        "avg_temp_celsius": 24.4,
+        "avg_rainfall_mm": 7.0,
+        "avg_humidity_pct": 90.0
+      },
+      "9": {
+        "avg_temp_celsius": 24.8,
+        "avg_rainfall_mm": 11.8,
+        "avg_humidity_pct": 90.5
+      },
+      "10": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 8.3,
+        "avg_humidity_pct": 89.3
+      },
+      "11": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 2.4,
+        "avg_humidity_pct": 84.3
+      },
+      "12": {
+        "avg_temp_celsius": 24.6,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 74.7
+      }
+    }
+  },
+  "Rivers": {
+    "lat": 4.8156,
+    "lon": 7.0498,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 25.6,
+        "avg_rainfall_mm": 1.2,
+        "avg_humidity_pct": 78.1
+      },
+      "2": {
+        "avg_temp_celsius": 26.8,
+        "avg_rainfall_mm": 1.2,
+        "avg_humidity_pct": 81.6
+      },
+      "3": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 4.8,
+        "avg_humidity_pct": 88.0
+      },
+      "4": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 5.3,
+        "avg_humidity_pct": 88.6
+      },
+      "5": {
+        "avg_temp_celsius": 26.7,
+        "avg_rainfall_mm": 7.4,
+        "avg_humidity_pct": 89.7
+      },
+      "6": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 12.7,
+        "avg_humidity_pct": 90.7
+      },
+      "7": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 12.1,
+        "avg_humidity_pct": 91.1
+      },
+      "8": {
+        "avg_temp_celsius": 25.0,
+        "avg_rainfall_mm": 10.4,
+        "avg_humidity_pct": 90.9
+      },
+      "9": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 13.8,
+        "avg_humidity_pct": 91.3
+      },
+      "10": {
+        "avg_temp_celsius": 25.9,
+        "avg_rainfall_mm": 8.8,
+        "avg_humidity_pct": 90.2
+      },
+      "11": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 6.6,
+        "avg_humidity_pct": 87.9
+      },
+      "12": {
+        "avg_temp_celsius": 25.9,
+        "avg_rainfall_mm": 1.0,
+        "avg_humidity_pct": 79.8
+      }
+    }
+  },
+  "Kaduna": {
+    "lat": 10.5222,
+    "lon": 7.4383,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 20.5,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 40.7
+      },
+      "2": {
+        "avg_temp_celsius": 23.7,
+        "avg_rainfall_mm": 0.2,
+        "avg_humidity_pct": 32.8
+      },
+      "3": {
+        "avg_temp_celsius": 26.9,
+        "avg_rainfall_mm": 4.6,
+        "avg_humidity_pct": 43.1
+      },
+      "4": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 10.5,
+        "avg_humidity_pct": 59.6
+      },
+      "5": {
+        "avg_temp_celsius": 26.3,
+        "avg_rainfall_mm": 12.9,
+        "avg_humidity_pct": 76.6
+      },
+      "6": {
+        "avg_temp_celsius": 24.9,
+        "avg_rainfall_mm": 11.8,
+        "avg_humidity_pct": 83.3
+      },
+      "7": {
+        "avg_temp_celsius": 23.8,
+        "avg_rainfall_mm": 17.4,
+        "avg_humidity_pct": 87.0
+      },
+      "8": {
+        "avg_temp_celsius": 23.4,
+        "avg_rainfall_mm": 13.0,
+        "avg_humidity_pct": 88.6
+      },
+      "9": {
+        "avg_temp_celsius": 24.0,
+        "avg_rainfall_mm": 11.4,
+        "avg_humidity_pct": 86.0
+      },
+      "10": {
+        "avg_temp_celsius": 24.0,
+        "avg_rainfall_mm": 4.2,
+        "avg_humidity_pct": 78.6
+      },
+      "11": {
+        "avg_temp_celsius": 22.0,
+        "avg_rainfall_mm": 1.3,
+        "avg_humidity_pct": 63.8
+      },
+      "12": {
+        "avg_temp_celsius": 19.7,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 53.1
+      }
+    }
+  },
+  "Enugu": {
+    "lat": 6.4584,
+    "lon": 7.5464,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 24.8,
+        "avg_rainfall_mm": 0.2,
+        "avg_humidity_pct": 62.0
+      },
+      "2": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 0.4,
+        "avg_humidity_pct": 67.3
+      },
+      "3": {
+        "avg_temp_celsius": 27.2,
+        "avg_rainfall_mm": 1.7,
+        "avg_humidity_pct": 80.9
+      },
+      "4": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 2.3,
+        "avg_humidity_pct": 83.1
+      },
+      "5": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 3.5,
+        "avg_humidity_pct": 86.1
+      },
+      "6": {
+        "avg_temp_celsius": 25.6,
+        "avg_rainfall_mm": 6.7,
+        "avg_humidity_pct": 88.2
+      },
+      "7": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 7.8,
+        "avg_humidity_pct": 88.6
+      },
+      "8": {
+        "avg_temp_celsius": 25.0,
+        "avg_rainfall_mm": 6.4,
+        "avg_humidity_pct": 88.5
+      },
+      "9": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 8.8,
+        "avg_humidity_pct": 89.1
+      },
+      "10": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 5.1,
+        "avg_humidity_pct": 88.3
+      },
+      "11": {
+        "avg_temp_celsius": 26.2,
+        "avg_rainfall_mm": 1.4,
+        "avg_humidity_pct": 78.4
+      },
+      "12": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 64.2
+      }
+    }
+  },
+  "Bauchi": {
+    "lat": 10.3158,
+    "lon": 9.8442,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 21.8,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 27.7
+      },
+      "2": {
+        "avg_temp_celsius": 24.8,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 22.6
+      },
+      "3": {
+        "avg_temp_celsius": 29.1,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 26.3
+      },
+      "4": {
+        "avg_temp_celsius": 30.7,
+        "avg_rainfall_mm": 2.9,
+        "avg_humidity_pct": 39.0
+      },
+      "5": {
+        "avg_temp_celsius": 29.5,
+        "avg_rainfall_mm": 6.7,
+        "avg_humidity_pct": 60.0
+      },
+      "6": {
+        "avg_temp_celsius": 27.4,
+        "avg_rainfall_mm": 6.7,
+        "avg_humidity_pct": 69.4
+      },
+      "7": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 9.2,
+        "avg_humidity_pct": 77.4
+      },
+      "8": {
+        "avg_temp_celsius": 24.5,
+        "avg_rainfall_mm": 8.5,
+        "avg_humidity_pct": 83.9
+      },
+      "9": {
+        "avg_temp_celsius": 24.9,
+        "avg_rainfall_mm": 6.7,
+        "avg_humidity_pct": 82.3
+      },
+      "10": {
+        "avg_temp_celsius": 25.6,
+        "avg_rainfall_mm": 2.1,
+        "avg_humidity_pct": 70.4
+      },
+      "11": {
+        "avg_temp_celsius": 24.3,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 47.7
+      },
+      "12": {
+        "avg_temp_celsius": 21.8,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 37.2
+      }
+    }
+  },
+  "Katsina": {
+    "lat": 12.9889,
+    "lon": 7.6006,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 20.6,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 22.7
+      },
+      "2": {
+        "avg_temp_celsius": 23.8,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 17.1
+      },
+      "3": {
+        "avg_temp_celsius": 29.1,
+        "avg_rainfall_mm": 0.2,
+        "avg_humidity_pct": 16.2
+      },
+      "4": {
+        "avg_temp_celsius": 31.6,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 23.2
+      },
+      "5": {
+        "avg_temp_celsius": 32.2,
+        "avg_rainfall_mm": 2.1,
+        "avg_humidity_pct": 39.3
+      },
+      "6": {
+        "avg_temp_celsius": 29.4,
+        "avg_rainfall_mm": 5.2,
+        "avg_humidity_pct": 59.4
+      },
+      "7": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 10.1,
+        "avg_humidity_pct": 75.2
+      },
+      "8": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 9.2,
+        "avg_humidity_pct": 83.4
+      },
+      "9": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 6.8,
+        "avg_humidity_pct": 81.2
+      },
+      "10": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 62.9
+      },
+      "11": {
+        "avg_temp_celsius": 23.1,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 41.9
+      },
+      "12": {
+        "avg_temp_celsius": 20.5,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 32.4
+      }
+    }
+  },
+  "Benue": {
+    "lat": 7.7322,
+    "lon": 8.5391,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 24.9,
+        "avg_rainfall_mm": 0.3,
+        "avg_humidity_pct": 48.3
+      },
+      "2": {
+        "avg_temp_celsius": 27.4,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 49.1
+      },
+      "3": {
+        "avg_temp_celsius": 28.8,
+        "avg_rainfall_mm": 1.6,
+        "avg_humidity_pct": 68.3
+      },
+      "4": {
+        "avg_temp_celsius": 28.6,
+        "avg_rainfall_mm": 3.8,
+        "avg_humidity_pct": 73.8
+      },
+      "5": {
+        "avg_temp_celsius": 27.7,
+        "avg_rainfall_mm": 4.3,
+        "avg_humidity_pct": 80.0
+      },
+      "6": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 5.3,
+        "avg_humidity_pct": 83.5
+      },
+      "7": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 5.5,
+        "avg_humidity_pct": 86.0
+      },
+      "8": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 5.1,
+        "avg_humidity_pct": 86.3
+      },
+      "9": {
+        "avg_temp_celsius": 25.6,
+        "avg_rainfall_mm": 6.2,
+        "avg_humidity_pct": 86.7
+      },
+      "10": {
+        "avg_temp_celsius": 26.0,
+        "avg_rainfall_mm": 4.7,
+        "avg_humidity_pct": 85.1
+      },
+      "11": {
+        "avg_temp_celsius": 26.1,
+        "avg_rainfall_mm": 1.8,
+        "avg_humidity_pct": 72.5
+      },
+      "12": {
+        "avg_temp_celsius": 24.5,
+        "avg_rainfall_mm": 0.3,
+        "avg_humidity_pct": 57.3
+      }
+    }
+  },
+  "Ogun": {
+    "lat": 7.16,
+    "lon": 3.35,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 0.4,
+        "avg_humidity_pct": 76.1
+      },
+      "2": {
+        "avg_temp_celsius": 26.9,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 80.3
+      },
+      "3": {
+        "avg_temp_celsius": 27.2,
+        "avg_rainfall_mm": 2.6,
+        "avg_humidity_pct": 85.5
+      },
+      "4": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 3.5,
+        "avg_humidity_pct": 87.2
+      },
+      "5": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 4.6,
+        "avg_humidity_pct": 88.6
+      },
+      "6": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 8.4,
+        "avg_humidity_pct": 89.9
+      },
+      "7": {
+        "avg_temp_celsius": 25.0,
+        "avg_rainfall_mm": 6.6,
+        "avg_humidity_pct": 89.6
+      },
+      "8": {
+        "avg_temp_celsius": 24.9,
+        "avg_rainfall_mm": 5.0,
+        "avg_humidity_pct": 88.8
+      },
+      "9": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 9.7,
+        "avg_humidity_pct": 90.1
+      },
+      "10": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 6.9,
+        "avg_humidity_pct": 89.6
+      },
+      "11": {
+        "avg_temp_celsius": 26.3,
+        "avg_rainfall_mm": 2.2,
+        "avg_humidity_pct": 85.9
+      },
+      "12": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 77.1
+      }
+    }
+  },
+  "Delta": {
+    "lat": 5.532,
+    "lon": 5.8987,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 1.3,
+        "avg_humidity_pct": 80.5
+      },
+      "2": {
+        "avg_temp_celsius": 26.8,
+        "avg_rainfall_mm": 1.1,
+        "avg_humidity_pct": 83.7
+      },
+      "3": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 4.9,
+        "avg_humidity_pct": 88.8
+      },
+      "4": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 5.7,
+        "avg_humidity_pct": 89.8
+      },
+      "5": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 6.8,
+        "avg_humidity_pct": 91.5
+      },
+      "6": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 11.6,
+        "avg_humidity_pct": 91.9
+      },
+      "7": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 10.5,
+        "avg_humidity_pct": 91.4
+      },
+      "8": {
+        "avg_temp_celsius": 24.9,
+        "avg_rainfall_mm": 7.4,
+        "avg_humidity_pct": 90.6
+      },
+      "9": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 10.7,
+        "avg_humidity_pct": 91.7
+      },
+      "10": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 8.3,
+        "avg_humidity_pct": 91.4
+      },
+      "11": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 5.4,
+        "avg_humidity_pct": 89.3
+      },
+      "12": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 1.1,
+        "avg_humidity_pct": 81.9
+      }
+    }
+  },
+  "Anambra": {
+    "lat": 6.2104,
+    "lon": 7.0691,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 24.8,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 71.0
+      },
+      "2": {
+        "avg_temp_celsius": 26.3,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 75.7
+      },
+      "3": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 2.8,
+        "avg_humidity_pct": 85.6
+      },
+      "4": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 3.3,
+        "avg_humidity_pct": 86.4
+      },
+      "5": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 5.3,
+        "avg_humidity_pct": 88.3
+      },
+      "6": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 9.5,
+        "avg_humidity_pct": 89.5
+      },
+      "7": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 9.5,
+        "avg_humidity_pct": 89.8
+      },
+      "8": {
+        "avg_temp_celsius": 25.0,
+        "avg_rainfall_mm": 7.8,
+        "avg_humidity_pct": 89.8
+      },
+      "9": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 11.0,
+        "avg_humidity_pct": 90.3
+      },
+      "10": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 7.3,
+        "avg_humidity_pct": 89.3
+      },
+      "11": {
+        "avg_temp_celsius": 26.3,
+        "avg_rainfall_mm": 2.9,
+        "avg_humidity_pct": 83.8
+      },
+      "12": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 0.2,
+        "avg_humidity_pct": 73.2
+      }
+    }
+  },
+  "Sokoto": {
+    "lat": 13.0059,
+    "lon": 5.2476,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 21.9,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 24.2
+      },
+      "2": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 18.5
+      },
+      "3": {
+        "avg_temp_celsius": 30.4,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 19.2
+      },
+      "4": {
+        "avg_temp_celsius": 32.9,
+        "avg_rainfall_mm": 0.4,
+        "avg_humidity_pct": 28.2
+      },
+      "5": {
+        "avg_temp_celsius": 33.3,
+        "avg_rainfall_mm": 2.1,
+        "avg_humidity_pct": 43.7
+      },
+      "6": {
+        "avg_temp_celsius": 30.4,
+        "avg_rainfall_mm": 3.9,
+        "avg_humidity_pct": 59.6
+      },
+      "7": {
+        "avg_temp_celsius": 27.9,
+        "avg_rainfall_mm": 7.8,
+        "avg_humidity_pct": 72.5
+      },
+      "8": {
+        "avg_temp_celsius": 26.2,
+        "avg_rainfall_mm": 9.8,
+        "avg_humidity_pct": 83.1
+      },
+      "9": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 7.2,
+        "avg_humidity_pct": 82.9
+      },
+      "10": {
+        "avg_temp_celsius": 26.2,
+        "avg_rainfall_mm": 1.1,
+        "avg_humidity_pct": 69.8
+      },
+      "11": {
+        "avg_temp_celsius": 23.8,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 49.2
+      },
+      "12": {
+        "avg_temp_celsius": 21.3,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 36.7
+      }
+    }
+  },
+  "Zamfara": {
+    "lat": 12.1704,
+    "lon": 6.6672,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 21.3,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 25.9
+      },
+      "2": {
+        "avg_temp_celsius": 24.4,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 20.5
+      },
+      "3": {
+        "avg_temp_celsius": 29.0,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 22.6
+      },
+      "4": {
+        "avg_temp_celsius": 30.6,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 34.6
+      },
+      "5": {
+        "avg_temp_celsius": 30.3,
+        "avg_rainfall_mm": 2.4,
+        "avg_humidity_pct": 53.8
+      },
+      "6": {
+        "avg_temp_celsius": 27.9,
+        "avg_rainfall_mm": 4.0,
+        "avg_humidity_pct": 67.3
+      },
+      "7": {
+        "avg_temp_celsius": 25.9,
+        "avg_rainfall_mm": 7.4,
+        "avg_humidity_pct": 77.1
+      },
+      "8": {
+        "avg_temp_celsius": 24.9,
+        "avg_rainfall_mm": 7.2,
+        "avg_humidity_pct": 82.6
+      },
+      "9": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 5.6,
+        "avg_humidity_pct": 80.5
+      },
+      "10": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 1.1,
+        "avg_humidity_pct": 63.5
+      },
+      "11": {
+        "avg_temp_celsius": 23.9,
+        "avg_rainfall_mm": 0.2,
+        "avg_humidity_pct": 42.7
+      },
+      "12": {
+        "avg_temp_celsius": 21.2,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 34.5
+      }
+    }
+  },
+  "Kebbi": {
+    "lat": 12.4539,
+    "lon": 4.1975,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 22.9,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 24.7
+      },
+      "2": {
+        "avg_temp_celsius": 26.0,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 19.4
+      },
+      "3": {
+        "avg_temp_celsius": 30.8,
+        "avg_rainfall_mm": 0.2,
+        "avg_humidity_pct": 21.8
+      },
+      "4": {
+        "avg_temp_celsius": 33.1,
+        "avg_rainfall_mm": 0.4,
+        "avg_humidity_pct": 32.4
+      },
+      "5": {
+        "avg_temp_celsius": 33.1,
+        "avg_rainfall_mm": 2.0,
+        "avg_humidity_pct": 47.7
+      },
+      "6": {
+        "avg_temp_celsius": 30.0,
+        "avg_rainfall_mm": 4.6,
+        "avg_humidity_pct": 63.6
+      },
+      "7": {
+        "avg_temp_celsius": 27.9,
+        "avg_rainfall_mm": 9.0,
+        "avg_humidity_pct": 73.7
+      },
+      "8": {
+        "avg_temp_celsius": 26.3,
+        "avg_rainfall_mm": 9.0,
+        "avg_humidity_pct": 83.7
+      },
+      "9": {
+        "avg_temp_celsius": 26.7,
+        "avg_rainfall_mm": 6.0,
+        "avg_humidity_pct": 82.8
+      },
+      "10": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 1.4,
+        "avg_humidity_pct": 71.3
+      },
+      "11": {
+        "avg_temp_celsius": 24.4,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 51.0
+      },
+      "12": {
+        "avg_temp_celsius": 22.3,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 37.4
+      }
+    }
+  },
+  "Niger": {
+    "lat": 9.6139,
+    "lon": 6.5569,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 24.4,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 45.6
+      },
+      "2": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 41.4
+      },
+      "3": {
+        "avg_temp_celsius": 30.3,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 51.7
+      },
+      "4": {
+        "avg_temp_celsius": 30.5,
+        "avg_rainfall_mm": 1.6,
+        "avg_humidity_pct": 59.6
+      },
+      "5": {
+        "avg_temp_celsius": 29.1,
+        "avg_rainfall_mm": 3.7,
+        "avg_humidity_pct": 72.2
+      },
+      "6": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 5.6,
+        "avg_humidity_pct": 81.5
+      },
+      "7": {
+        "avg_temp_celsius": 26.1,
+        "avg_rainfall_mm": 6.0,
+        "avg_humidity_pct": 84.2
+      },
+      "8": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 7.2,
+        "avg_humidity_pct": 85.8
+      },
+      "9": {
+        "avg_temp_celsius": 26.1,
+        "avg_rainfall_mm": 7.7,
+        "avg_humidity_pct": 85.1
+      },
+      "10": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 4.0,
+        "avg_humidity_pct": 80.3
+      },
+      "11": {
+        "avg_temp_celsius": 26.0,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 63.6
+      },
+      "12": {
+        "avg_temp_celsius": 24.3,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 53.1
+      }
+    }
+  },
+  "Kwara": {
+    "lat": 8.4966,
+    "lon": 4.5426,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 24.4,
+        "avg_rainfall_mm": 0.2,
+        "avg_humidity_pct": 55.1
+      },
+      "2": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 0.4,
+        "avg_humidity_pct": 57.2
+      },
+      "3": {
+        "avg_temp_celsius": 27.8,
+        "avg_rainfall_mm": 1.8,
+        "avg_humidity_pct": 71.3
+      },
+      "4": {
+        "avg_temp_celsius": 27.2,
+        "avg_rainfall_mm": 2.7,
+        "avg_humidity_pct": 77.1
+      },
+      "5": {
+        "avg_temp_celsius": 26.7,
+        "avg_rainfall_mm": 4.1,
+        "avg_humidity_pct": 80.7
+      },
+      "6": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 7.3,
+        "avg_humidity_pct": 85.4
+      },
+      "7": {
+        "avg_temp_celsius": 24.7,
+        "avg_rainfall_mm": 6.4,
+        "avg_humidity_pct": 86.6
+      },
+      "8": {
+        "avg_temp_celsius": 24.4,
+        "avg_rainfall_mm": 6.0,
+        "avg_humidity_pct": 86.8
+      },
+      "9": {
+        "avg_temp_celsius": 24.7,
+        "avg_rainfall_mm": 8.8,
+        "avg_humidity_pct": 87.4
+      },
+      "10": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 6.2,
+        "avg_humidity_pct": 84.2
+      },
+      "11": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 1.2,
+        "avg_humidity_pct": 72.6
+      },
+      "12": {
+        "avg_temp_celsius": 24.2,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 60.9
+      }
+    }
+  },
+  "Osun": {
+    "lat": 7.5629,
+    "lon": 4.52,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 24.1,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 72.4
+      },
+      "2": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 1.2,
+        "avg_humidity_pct": 77.1
+      },
+      "3": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 3.2,
+        "avg_humidity_pct": 85.7
+      },
+      "4": {
+        "avg_temp_celsius": 26.1,
+        "avg_rainfall_mm": 4.6,
+        "avg_humidity_pct": 88.3
+      },
+      "5": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 5.9,
+        "avg_humidity_pct": 90.2
+      },
+      "6": {
+        "avg_temp_celsius": 24.8,
+        "avg_rainfall_mm": 11.0,
+        "avg_humidity_pct": 91.2
+      },
+      "7": {
+        "avg_temp_celsius": 24.3,
+        "avg_rainfall_mm": 8.8,
+        "avg_humidity_pct": 91.0
+      },
+      "8": {
+        "avg_temp_celsius": 24.1,
+        "avg_rainfall_mm": 7.6,
+        "avg_humidity_pct": 90.7
+      },
+      "9": {
+        "avg_temp_celsius": 24.5,
+        "avg_rainfall_mm": 12.4,
+        "avg_humidity_pct": 91.2
+      },
+      "10": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 9.1,
+        "avg_humidity_pct": 89.9
+      },
+      "11": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 3.1,
+        "avg_humidity_pct": 85.1
+      },
+      "12": {
+        "avg_temp_celsius": 24.2,
+        "avg_rainfall_mm": 1.1,
+        "avg_humidity_pct": 75.2
+      }
+    }
+  },
+  "Ondo": {
+    "lat": 7.2526,
+    "lon": 5.1975,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 23.9,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 67.6
+      },
+      "2": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 1.5,
+        "avg_humidity_pct": 73.7
+      },
+      "3": {
+        "avg_temp_celsius": 26.0,
+        "avg_rainfall_mm": 2.8,
+        "avg_humidity_pct": 84.0
+      },
+      "4": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 3.8,
+        "avg_humidity_pct": 86.3
+      },
+      "5": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 5.4,
+        "avg_humidity_pct": 88.9
+      },
+      "6": {
+        "avg_temp_celsius": 24.4,
+        "avg_rainfall_mm": 9.3,
+        "avg_humidity_pct": 90.2
+      },
+      "7": {
+        "avg_temp_celsius": 23.9,
+        "avg_rainfall_mm": 8.1,
+        "avg_humidity_pct": 90.4
+      },
+      "8": {
+        "avg_temp_celsius": 23.7,
+        "avg_rainfall_mm": 7.6,
+        "avg_humidity_pct": 90.3
+      },
+      "9": {
+        "avg_temp_celsius": 24.1,
+        "avg_rainfall_mm": 11.1,
+        "avg_humidity_pct": 90.5
+      },
+      "10": {
+        "avg_temp_celsius": 24.7,
+        "avg_rainfall_mm": 7.6,
+        "avg_humidity_pct": 88.8
+      },
+      "11": {
+        "avg_temp_celsius": 25.0,
+        "avg_rainfall_mm": 3.0,
+        "avg_humidity_pct": 82.5
+      },
+      "12": {
+        "avg_temp_celsius": 23.9,
+        "avg_rainfall_mm": 1.5,
+        "avg_humidity_pct": 71.2
+      }
+    }
+  },
+  "Ekiti": {
+    "lat": 7.719,
+    "lon": 5.311,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 23.9,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 67.6
+      },
+      "2": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 1.5,
+        "avg_humidity_pct": 73.7
+      },
+      "3": {
+        "avg_temp_celsius": 26.0,
+        "avg_rainfall_mm": 2.8,
+        "avg_humidity_pct": 84.0
+      },
+      "4": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 3.8,
+        "avg_humidity_pct": 86.3
+      },
+      "5": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 5.4,
+        "avg_humidity_pct": 88.9
+      },
+      "6": {
+        "avg_temp_celsius": 24.4,
+        "avg_rainfall_mm": 9.3,
+        "avg_humidity_pct": 90.2
+      },
+      "7": {
+        "avg_temp_celsius": 23.9,
+        "avg_rainfall_mm": 8.1,
+        "avg_humidity_pct": 90.4
+      },
+      "8": {
+        "avg_temp_celsius": 23.7,
+        "avg_rainfall_mm": 7.6,
+        "avg_humidity_pct": 90.3
+      },
+      "9": {
+        "avg_temp_celsius": 24.1,
+        "avg_rainfall_mm": 11.1,
+        "avg_humidity_pct": 90.5
+      },
+      "10": {
+        "avg_temp_celsius": 24.7,
+        "avg_rainfall_mm": 7.6,
+        "avg_humidity_pct": 88.8
+      },
+      "11": {
+        "avg_temp_celsius": 25.0,
+        "avg_rainfall_mm": 3.0,
+        "avg_humidity_pct": 82.5
+      },
+      "12": {
+        "avg_temp_celsius": 23.9,
+        "avg_rainfall_mm": 1.5,
+        "avg_humidity_pct": 71.2
+      }
+    }
+  },
+  "Edo": {
+    "lat": 6.335,
+    "lon": 5.627,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 24.8,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 74.6
+      },
+      "2": {
+        "avg_temp_celsius": 26.2,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 80.3
+      },
+      "3": {
+        "avg_temp_celsius": 26.7,
+        "avg_rainfall_mm": 3.6,
+        "avg_humidity_pct": 88.9
+      },
+      "4": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 4.4,
+        "avg_humidity_pct": 90.2
+      },
+      "5": {
+        "avg_temp_celsius": 26.3,
+        "avg_rainfall_mm": 5.2,
+        "avg_humidity_pct": 91.4
+      },
+      "6": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 10.4,
+        "avg_humidity_pct": 92.0
+      },
+      "7": {
+        "avg_temp_celsius": 24.9,
+        "avg_rainfall_mm": 9.7,
+        "avg_humidity_pct": 91.8
+      },
+      "8": {
+        "avg_temp_celsius": 24.7,
+        "avg_rainfall_mm": 7.9,
+        "avg_humidity_pct": 91.3
+      },
+      "9": {
+        "avg_temp_celsius": 25.0,
+        "avg_rainfall_mm": 10.6,
+        "avg_humidity_pct": 92.0
+      },
+      "10": {
+        "avg_temp_celsius": 25.6,
+        "avg_rainfall_mm": 7.2,
+        "avg_humidity_pct": 91.1
+      },
+      "11": {
+        "avg_temp_celsius": 26.2,
+        "avg_rainfall_mm": 3.5,
+        "avg_humidity_pct": 86.7
+      },
+      "12": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 76.7
+      }
+    }
+  },
+  "Cross River": {
+    "lat": 4.9517,
+    "lon": 8.322,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 26.2,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 78.1
+      },
+      "2": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 1.5,
+        "avg_humidity_pct": 81.2
+      },
+      "3": {
+        "avg_temp_celsius": 27.2,
+        "avg_rainfall_mm": 5.1,
+        "avg_humidity_pct": 86.4
+      },
+      "4": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 5.9,
+        "avg_humidity_pct": 87.1
+      },
+      "5": {
+        "avg_temp_celsius": 26.8,
+        "avg_rainfall_mm": 7.3,
+        "avg_humidity_pct": 88.3
+      },
+      "6": {
+        "avg_temp_celsius": 25.9,
+        "avg_rainfall_mm": 13.8,
+        "avg_humidity_pct": 89.8
+      },
+      "7": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 12.7,
+        "avg_humidity_pct": 90.6
+      },
+      "8": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 11.8,
+        "avg_humidity_pct": 90.6
+      },
+      "9": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 13.4,
+        "avg_humidity_pct": 90.6
+      },
+      "10": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 10.3,
+        "avg_humidity_pct": 89.9
+      },
+      "11": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 5.5,
+        "avg_humidity_pct": 87.3
+      },
+      "12": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 79.7
+      }
+    }
+  },
+  "Akwa Ibom": {
+    "lat": 5.0077,
+    "lon": 7.8536,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 26.2,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 78.1
+      },
+      "2": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 1.5,
+        "avg_humidity_pct": 81.2
+      },
+      "3": {
+        "avg_temp_celsius": 27.2,
+        "avg_rainfall_mm": 5.1,
+        "avg_humidity_pct": 86.4
+      },
+      "4": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 5.9,
+        "avg_humidity_pct": 87.1
+      },
+      "5": {
+        "avg_temp_celsius": 26.8,
+        "avg_rainfall_mm": 7.3,
+        "avg_humidity_pct": 88.3
+      },
+      "6": {
+        "avg_temp_celsius": 25.9,
+        "avg_rainfall_mm": 13.8,
+        "avg_humidity_pct": 89.8
+      },
+      "7": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 12.7,
+        "avg_humidity_pct": 90.6
+      },
+      "8": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 11.8,
+        "avg_humidity_pct": 90.6
+      },
+      "9": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 13.4,
+        "avg_humidity_pct": 90.6
+      },
+      "10": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 10.3,
+        "avg_humidity_pct": 89.9
+      },
+      "11": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 5.5,
+        "avg_humidity_pct": 87.3
+      },
+      "12": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 79.7
+      }
+    }
+  },
+  "Imo": {
+    "lat": 5.4836,
+    "lon": 7.0333,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 74.5
+      },
+      "2": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 78.7
+      },
+      "3": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 3.5,
+        "avg_humidity_pct": 86.6
+      },
+      "4": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 4.1,
+        "avg_humidity_pct": 87.2
+      },
+      "5": {
+        "avg_temp_celsius": 26.7,
+        "avg_rainfall_mm": 6.4,
+        "avg_humidity_pct": 88.7
+      },
+      "6": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 10.3,
+        "avg_humidity_pct": 89.9
+      },
+      "7": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 9.8,
+        "avg_humidity_pct": 90.3
+      },
+      "8": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 8.1,
+        "avg_humidity_pct": 90.1
+      },
+      "9": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 11.8,
+        "avg_humidity_pct": 90.7
+      },
+      "10": {
+        "avg_temp_celsius": 25.9,
+        "avg_rainfall_mm": 8.2,
+        "avg_humidity_pct": 89.5
+      },
+      "11": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 4.4,
+        "avg_humidity_pct": 85.9
+      },
+      "12": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 0.4,
+        "avg_humidity_pct": 76.6
+      }
+    }
+  },
+  "Abia": {
+    "lat": 5.4527,
+    "lon": 7.5249,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 73.9
+      },
+      "2": {
+        "avg_temp_celsius": 26.3,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 78.0
+      },
+      "3": {
+        "avg_temp_celsius": 26.9,
+        "avg_rainfall_mm": 3.1,
+        "avg_humidity_pct": 86.2
+      },
+      "4": {
+        "avg_temp_celsius": 26.8,
+        "avg_rainfall_mm": 3.7,
+        "avg_humidity_pct": 86.9
+      },
+      "5": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 5.3,
+        "avg_humidity_pct": 88.6
+      },
+      "6": {
+        "avg_temp_celsius": 25.6,
+        "avg_rainfall_mm": 8.6,
+        "avg_humidity_pct": 89.6
+      },
+      "7": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 8.3,
+        "avg_humidity_pct": 90.0
+      },
+      "8": {
+        "avg_temp_celsius": 25.0,
+        "avg_rainfall_mm": 7.1,
+        "avg_humidity_pct": 89.8
+      },
+      "9": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 9.4,
+        "avg_humidity_pct": 90.5
+      },
+      "10": {
+        "avg_temp_celsius": 25.6,
+        "avg_rainfall_mm": 7.6,
+        "avg_humidity_pct": 90.0
+      },
+      "11": {
+        "avg_temp_celsius": 26.1,
+        "avg_rainfall_mm": 3.7,
+        "avg_humidity_pct": 86.0
+      },
+      "12": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 0.3,
+        "avg_humidity_pct": 76.3
+      }
+    }
+  },
+  "Ebonyi": {
+    "lat": 6.2649,
+    "lon": 8.0137,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 57.5
+      },
+      "2": {
+        "avg_temp_celsius": 27.7,
+        "avg_rainfall_mm": 0.3,
+        "avg_humidity_pct": 60.8
+      },
+      "3": {
+        "avg_temp_celsius": 28.1,
+        "avg_rainfall_mm": 1.5,
+        "avg_humidity_pct": 76.7
+      },
+      "4": {
+        "avg_temp_celsius": 27.9,
+        "avg_rainfall_mm": 2.2,
+        "avg_humidity_pct": 80.0
+      },
+      "5": {
+        "avg_temp_celsius": 27.2,
+        "avg_rainfall_mm": 3.0,
+        "avg_humidity_pct": 84.0
+      },
+      "6": {
+        "avg_temp_celsius": 26.1,
+        "avg_rainfall_mm": 6.0,
+        "avg_humidity_pct": 86.9
+      },
+      "7": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 6.4,
+        "avg_humidity_pct": 88.0
+      },
+      "8": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 5.6,
+        "avg_humidity_pct": 87.6
+      },
+      "9": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 6.7,
+        "avg_humidity_pct": 88.2
+      },
+      "10": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 4.4,
+        "avg_humidity_pct": 87.4
+      },
+      "11": {
+        "avg_temp_celsius": 26.8,
+        "avg_rainfall_mm": 1.2,
+        "avg_humidity_pct": 76.3
+      },
+      "12": {
+        "avg_temp_celsius": 26.0,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 60.4
+      }
+    }
+  },
+  "Kogi": {
+    "lat": 7.7973,
+    "lon": 6.7367,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 0.4,
+        "avg_humidity_pct": 49.9
+      },
+      "2": {
+        "avg_temp_celsius": 28.0,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 52.6
+      },
+      "3": {
+        "avg_temp_celsius": 29.4,
+        "avg_rainfall_mm": 1.2,
+        "avg_humidity_pct": 66.6
+      },
+      "4": {
+        "avg_temp_celsius": 29.1,
+        "avg_rainfall_mm": 2.3,
+        "avg_humidity_pct": 70.9
+      },
+      "5": {
+        "avg_temp_celsius": 28.0,
+        "avg_rainfall_mm": 4.6,
+        "avg_humidity_pct": 78.5
+      },
+      "6": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 6.1,
+        "avg_humidity_pct": 83.4
+      },
+      "7": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 6.1,
+        "avg_humidity_pct": 85.1
+      },
+      "8": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 6.0,
+        "avg_humidity_pct": 85.6
+      },
+      "9": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 7.6,
+        "avg_humidity_pct": 86.0
+      },
+      "10": {
+        "avg_temp_celsius": 26.3,
+        "avg_rainfall_mm": 5.0,
+        "avg_humidity_pct": 83.7
+      },
+      "11": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 1.5,
+        "avg_humidity_pct": 70.5
+      },
+      "12": {
+        "avg_temp_celsius": 25.5,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 56.7
+      }
+    }
+  },
+  "Nasarawa": {
+    "lat": 8.4925,
+    "lon": 8.522,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 29.1
+      },
+      "2": {
+        "avg_temp_celsius": 29.5,
+        "avg_rainfall_mm": 0.2,
+        "avg_humidity_pct": 28.6
+      },
+      "3": {
+        "avg_temp_celsius": 30.5,
+        "avg_rainfall_mm": 1.0,
+        "avg_humidity_pct": 51.6
+      },
+      "4": {
+        "avg_temp_celsius": 29.9,
+        "avg_rainfall_mm": 3.4,
+        "avg_humidity_pct": 63.4
+      },
+      "5": {
+        "avg_temp_celsius": 28.4,
+        "avg_rainfall_mm": 4.9,
+        "avg_humidity_pct": 74.8
+      },
+      "6": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 5.7,
+        "avg_humidity_pct": 80.3
+      },
+      "7": {
+        "avg_temp_celsius": 25.9,
+        "avg_rainfall_mm": 5.8,
+        "avg_humidity_pct": 83.9
+      },
+      "8": {
+        "avg_temp_celsius": 25.4,
+        "avg_rainfall_mm": 5.5,
+        "avg_humidity_pct": 85.7
+      },
+      "9": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 4.7,
+        "avg_humidity_pct": 85.2
+      },
+      "10": {
+        "avg_temp_celsius": 26.4,
+        "avg_rainfall_mm": 3.9,
+        "avg_humidity_pct": 80.8
+      },
+      "11": {
+        "avg_temp_celsius": 26.9,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 58.6
+      },
+      "12": {
+        "avg_temp_celsius": 26.3,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 39.4
+      }
+    }
+  },
+  "Plateau": {
+    "lat": 9.8965,
+    "lon": 8.8583,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 21.4,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 23.4
+      },
+      "2": {
+        "avg_temp_celsius": 23.9,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 20.4
+      },
+      "3": {
+        "avg_temp_celsius": 26.2,
+        "avg_rainfall_mm": 6.8,
+        "avg_humidity_pct": 35.4
+      },
+      "4": {
+        "avg_temp_celsius": 26.1,
+        "avg_rainfall_mm": 12.9,
+        "avg_humidity_pct": 54.5
+      },
+      "5": {
+        "avg_temp_celsius": 24.9,
+        "avg_rainfall_mm": 14.8,
+        "avg_humidity_pct": 73.8
+      },
+      "6": {
+        "avg_temp_celsius": 23.5,
+        "avg_rainfall_mm": 10.8,
+        "avg_humidity_pct": 79.8
+      },
+      "7": {
+        "avg_temp_celsius": 22.3,
+        "avg_rainfall_mm": 12.8,
+        "avg_humidity_pct": 84.8
+      },
+      "8": {
+        "avg_temp_celsius": 21.5,
+        "avg_rainfall_mm": 9.4,
+        "avg_humidity_pct": 88.3
+      },
+      "9": {
+        "avg_temp_celsius": 22.1,
+        "avg_rainfall_mm": 8.1,
+        "avg_humidity_pct": 85.2
+      },
+      "10": {
+        "avg_temp_celsius": 22.4,
+        "avg_rainfall_mm": 3.1,
+        "avg_humidity_pct": 75.8
+      },
+      "11": {
+        "avg_temp_celsius": 21.8,
+        "avg_rainfall_mm": 1.9,
+        "avg_humidity_pct": 52.9
+      },
+      "12": {
+        "avg_temp_celsius": 20.8,
+        "avg_rainfall_mm": 0.7,
+        "avg_humidity_pct": 34.6
+      }
+    }
+  },
+  "Taraba": {
+    "lat": 8.8954,
+    "lon": 11.3735,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 25.0,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 29.3
+      },
+      "2": {
+        "avg_temp_celsius": 28.2,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 24.5
+      },
+      "3": {
+        "avg_temp_celsius": 31.1,
+        "avg_rainfall_mm": 0.2,
+        "avg_humidity_pct": 38.0
+      },
+      "4": {
+        "avg_temp_celsius": 30.6,
+        "avg_rainfall_mm": 1.9,
+        "avg_humidity_pct": 55.4
+      },
+      "5": {
+        "avg_temp_celsius": 28.8,
+        "avg_rainfall_mm": 3.4,
+        "avg_humidity_pct": 70.9
+      },
+      "6": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 4.8,
+        "avg_humidity_pct": 78.3
+      },
+      "7": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 7.6,
+        "avg_humidity_pct": 84.4
+      },
+      "8": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 5.1,
+        "avg_humidity_pct": 86.5
+      },
+      "9": {
+        "avg_temp_celsius": 25.6,
+        "avg_rainfall_mm": 5.4,
+        "avg_humidity_pct": 84.9
+      },
+      "10": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 2.5,
+        "avg_humidity_pct": 77.5
+      },
+      "11": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 55.6
+      },
+      "12": {
+        "avg_temp_celsius": 24.6,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 40.0
+      }
+    }
+  },
+  "Adamawa": {
+    "lat": 9.2035,
+    "lon": 12.4954,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 25.9,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 23.9
+      },
+      "2": {
+        "avg_temp_celsius": 28.9,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 18.9
+      },
+      "3": {
+        "avg_temp_celsius": 31.9,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 28.5
+      },
+      "4": {
+        "avg_temp_celsius": 31.8,
+        "avg_rainfall_mm": 1.8,
+        "avg_humidity_pct": 45.5
+      },
+      "5": {
+        "avg_temp_celsius": 29.7,
+        "avg_rainfall_mm": 3.5,
+        "avg_humidity_pct": 63.3
+      },
+      "6": {
+        "avg_temp_celsius": 27.8,
+        "avg_rainfall_mm": 4.6,
+        "avg_humidity_pct": 71.9
+      },
+      "7": {
+        "avg_temp_celsius": 25.9,
+        "avg_rainfall_mm": 6.9,
+        "avg_humidity_pct": 80.5
+      },
+      "8": {
+        "avg_temp_celsius": 25.1,
+        "avg_rainfall_mm": 5.0,
+        "avg_humidity_pct": 83.7
+      },
+      "9": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 5.5,
+        "avg_humidity_pct": 82.5
+      },
+      "10": {
+        "avg_temp_celsius": 26.7,
+        "avg_rainfall_mm": 2.3,
+        "avg_humidity_pct": 74.7
+      },
+      "11": {
+        "avg_temp_celsius": 26.9,
+        "avg_rainfall_mm": 0.4,
+        "avg_humidity_pct": 53.3
+      },
+      "12": {
+        "avg_temp_celsius": 25.6,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 35.5
+      }
+    }
+  },
+  "Gombe": {
+    "lat": 10.2791,
+    "lon": 11.167,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 23.1,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 25.9
+      },
+      "2": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 19.0
+      },
+      "3": {
+        "avg_temp_celsius": 30.5,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 23.7
+      },
+      "4": {
+        "avg_temp_celsius": 31.3,
+        "avg_rainfall_mm": 3.2,
+        "avg_humidity_pct": 41.0
+      },
+      "5": {
+        "avg_temp_celsius": 29.6,
+        "avg_rainfall_mm": 6.1,
+        "avg_humidity_pct": 63.2
+      },
+      "6": {
+        "avg_temp_celsius": 27.2,
+        "avg_rainfall_mm": 6.4,
+        "avg_humidity_pct": 74.8
+      },
+      "7": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 9.5,
+        "avg_humidity_pct": 82.0
+      },
+      "8": {
+        "avg_temp_celsius": 24.8,
+        "avg_rainfall_mm": 10.0,
+        "avg_humidity_pct": 86.2
+      },
+      "9": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 8.1,
+        "avg_humidity_pct": 85.1
+      },
+      "10": {
+        "avg_temp_celsius": 25.7,
+        "avg_rainfall_mm": 1.8,
+        "avg_humidity_pct": 76.0
+      },
+      "11": {
+        "avg_temp_celsius": 24.2,
+        "avg_rainfall_mm": 0.3,
+        "avg_humidity_pct": 54.8
+      },
+      "12": {
+        "avg_temp_celsius": 22.5,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 39.0
+      }
+    }
+  },
+  "Yobe": {
+    "lat": 12.2939,
+    "lon": 11.7494,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 21.2,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 22.6
+      },
+      "2": {
+        "avg_temp_celsius": 24.3,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 17.4
+      },
+      "3": {
+        "avg_temp_celsius": 29.8,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 14.9
+      },
+      "4": {
+        "avg_temp_celsius": 32.8,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 17.6
+      },
+      "5": {
+        "avg_temp_celsius": 33.9,
+        "avg_rainfall_mm": 0.8,
+        "avg_humidity_pct": 33.1
+      },
+      "6": {
+        "avg_temp_celsius": 31.8,
+        "avg_rainfall_mm": 3.7,
+        "avg_humidity_pct": 49.6
+      },
+      "7": {
+        "avg_temp_celsius": 28.8,
+        "avg_rainfall_mm": 8.0,
+        "avg_humidity_pct": 64.6
+      },
+      "8": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 8.6,
+        "avg_humidity_pct": 77.6
+      },
+      "9": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 4.7,
+        "avg_humidity_pct": 75.2
+      },
+      "10": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 56.2
+      },
+      "11": {
+        "avg_temp_celsius": 24.4,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 36.3
+      },
+      "12": {
+        "avg_temp_celsius": 21.4,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 30.5
+      }
+    }
+  },
+  "Borno": {
+    "lat": 11.8311,
+    "lon": 13.1508,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 23.0,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 19.1
+      },
+      "2": {
+        "avg_temp_celsius": 26.0,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 15.0
+      },
+      "3": {
+        "avg_temp_celsius": 31.0,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 13.9
+      },
+      "4": {
+        "avg_temp_celsius": 33.6,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 18.6
+      },
+      "5": {
+        "avg_temp_celsius": 34.1,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 35.5
+      },
+      "6": {
+        "avg_temp_celsius": 31.8,
+        "avg_rainfall_mm": 2.2,
+        "avg_humidity_pct": 50.6
+      },
+      "7": {
+        "avg_temp_celsius": 29.0,
+        "avg_rainfall_mm": 4.7,
+        "avg_humidity_pct": 64.0
+      },
+      "8": {
+        "avg_temp_celsius": 26.9,
+        "avg_rainfall_mm": 5.3,
+        "avg_humidity_pct": 75.3
+      },
+      "9": {
+        "avg_temp_celsius": 27.7,
+        "avg_rainfall_mm": 2.8,
+        "avg_humidity_pct": 71.7
+      },
+      "10": {
+        "avg_temp_celsius": 28.6,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 51.3
+      },
+      "11": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 30.6
+      },
+      "12": {
+        "avg_temp_celsius": 23.6,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 25.0
+      }
+    }
+  },
+  "Jigawa": {
+    "lat": 11.858,
+    "lon": 9.3484,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 20.8,
+        "avg_rainfall_mm": 0.1,
+        "avg_humidity_pct": 24.1
+      },
+      "2": {
+        "avg_temp_celsius": 23.9,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 18.7
+      },
+      "3": {
+        "avg_temp_celsius": 29.1,
+        "avg_rainfall_mm": 0.9,
+        "avg_humidity_pct": 17.2
+      },
+      "4": {
+        "avg_temp_celsius": 31.6,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 24.7
+      },
+      "5": {
+        "avg_temp_celsius": 32.5,
+        "avg_rainfall_mm": 1.0,
+        "avg_humidity_pct": 40.7
+      },
+      "6": {
+        "avg_temp_celsius": 30.9,
+        "avg_rainfall_mm": 2.8,
+        "avg_humidity_pct": 52.4
+      },
+      "7": {
+        "avg_temp_celsius": 28.5,
+        "avg_rainfall_mm": 6.8,
+        "avg_humidity_pct": 64.3
+      },
+      "8": {
+        "avg_temp_celsius": 26.5,
+        "avg_rainfall_mm": 7.1,
+        "avg_humidity_pct": 76.2
+      },
+      "9": {
+        "avg_temp_celsius": 27.2,
+        "avg_rainfall_mm": 3.9,
+        "avg_humidity_pct": 73.0
+      },
+      "10": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 0.5,
+        "avg_humidity_pct": 56.0
+      },
+      "11": {
+        "avg_temp_celsius": 24.2,
+        "avg_rainfall_mm": 0.6,
+        "avg_humidity_pct": 38.9
+      },
+      "12": {
+        "avg_temp_celsius": 21.1,
+        "avg_rainfall_mm": 0.0,
+        "avg_humidity_pct": 32.2
+      }
+    }
+  },
+  "Bayelsa": {
+    "lat": 4.7729,
+    "lon": 6.0698,
+    "monthly_averages": {
+      "1": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 1.4,
+        "avg_humidity_pct": 79.0
+      },
+      "2": {
+        "avg_temp_celsius": 27.0,
+        "avg_rainfall_mm": 1.4,
+        "avg_humidity_pct": 82.4
+      },
+      "3": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 5.3,
+        "avg_humidity_pct": 88.2
+      },
+      "4": {
+        "avg_temp_celsius": 27.1,
+        "avg_rainfall_mm": 5.8,
+        "avg_humidity_pct": 88.8
+      },
+      "5": {
+        "avg_temp_celsius": 26.7,
+        "avg_rainfall_mm": 7.7,
+        "avg_humidity_pct": 89.9
+      },
+      "6": {
+        "avg_temp_celsius": 25.8,
+        "avg_rainfall_mm": 13.8,
+        "avg_humidity_pct": 90.9
+      },
+      "7": {
+        "avg_temp_celsius": 25.2,
+        "avg_rainfall_mm": 12.8,
+        "avg_humidity_pct": 91.1
+      },
+      "8": {
+        "avg_temp_celsius": 25.0,
+        "avg_rainfall_mm": 10.0,
+        "avg_humidity_pct": 90.7
+      },
+      "9": {
+        "avg_temp_celsius": 25.3,
+        "avg_rainfall_mm": 13.3,
+        "avg_humidity_pct": 91.5
+      },
+      "10": {
+        "avg_temp_celsius": 25.9,
+        "avg_rainfall_mm": 8.5,
+        "avg_humidity_pct": 90.5
+      },
+      "11": {
+        "avg_temp_celsius": 26.6,
+        "avg_rainfall_mm": 6.3,
+        "avg_humidity_pct": 88.0
+      },
+      "12": {
+        "avg_temp_celsius": 26.1,
+        "avg_rainfall_mm": 1.4,
+        "avg_humidity_pct": 79.9
+      }
+    }
+  }
+}

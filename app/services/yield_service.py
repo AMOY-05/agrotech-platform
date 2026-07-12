@@ -45,16 +45,44 @@ async def predict_yield_ml(
     temperature_celsius: float,
     fertilizer_used: bool
 ) -> dict:
-    """
-    Real ML-based yield prediction using trained XGBoost model.
-    """
+    """Real ML-based yield prediction using trained XGBoost model."""
     from app.services.price_service import _normalize_crop
+    from app.services.real_data_service import (
+        get_real_yield_baseline,
+        get_real_weather_for_region
+    )
+    from datetime import datetime
+
     crop_type = _normalize_crop(crop_type)
 
     if model is None:
-        raise Exception("Yield prediction model not loaded — check server logs")
+        raise Exception("Yield prediction model not loaded")
 
-    logger.info(f"Predicting yield: crop={crop_type}, size={farm_size_hectares}ha, region={region}")
+    logger.info(
+        f"Predicting yield: crop={crop_type}, "
+        f"size={farm_size_hectares}ha, region={region}"
+    )
+
+    # Try to get real NASA weather if defaults are being used
+    if rainfall_mm in (1200, 200):  # these are our defaults
+        real_weather = get_real_weather_for_region(
+            region, month=datetime.now().month
+        )
+        if real_weather:
+            rainfall_mm = real_weather["rainfall_mm"] * 30  # daily → monthly
+            temperature_celsius = real_weather["temperature_celsius"]
+            logger.info(
+                f"Using NASA weather: {temperature_celsius}°C, "
+                f"~{rainfall_mm}mm/month for {region}"
+            )
+
+    # Get real yield baseline from FAO data
+    real_baseline = get_real_yield_baseline(crop_type)
+    if real_baseline:
+        logger.info(
+            f"Real FAO yield baseline for {crop_type}: "
+            f"{real_baseline} kg/ha"
+        )
 
     try:
         crop_encoded = _safe_encode(encoders["crop_type"], crop_type, "crop_type")
@@ -72,27 +100,43 @@ async def predict_yield_ml(
         ]])
 
         prediction = model.predict(features)[0]
-        predicted_yield = max(0, round(float(prediction), 1))
+        predicted_yield_per_ha = max(0, float(prediction) / farm_size_hectares)
 
-        # Simple confidence interval based on model's typical error margin (~12%)
-        margin = predicted_yield * 0.12
-        lower_bound = round(max(0, predicted_yield - margin), 1)
-        upper_bound = round(predicted_yield + margin, 1)
+        # If we have real FAO baseline, blend it with ML prediction
+        if real_baseline:
+            # Weight: 60% ML model, 40% real FAO baseline
+            blended_per_ha = (predicted_yield_per_ha * 0.6 +
+                             real_baseline * 0.7)
+            final_yield = round(blended_per_ha * farm_size_hectares, 1)
+            data_note = (
+                f"Prediction blends ML model with real FAO yield data "
+                f"(Nigeria avg: {real_baseline:.0f} kg/ha)"
+            )
+        else:
+            final_yield = max(0, round(float(prediction), 1))
+            data_note = "ML model prediction (no FAO baseline available for this crop)"
 
-        # Generate a practical recommendation
+        margin = final_yield * 0.12
+        lower_bound = round(max(0, final_yield - margin), 1)
+        upper_bound = round(final_yield + margin, 1)
+
         recommendation = _generate_recommendation(
             crop_type, fertilizer_used, rainfall_mm, temperature_celsius
         )
 
-        logger.info(f"Predicted yield: {predicted_yield} kg (range: {lower_bound}-{upper_bound})")
+        logger.info(
+            f"Predicted yield: {final_yield} kg "
+            f"(range: {lower_bound}-{upper_bound})"
+        )
 
         return {
-            "predicted_yield_kg": predicted_yield,
+            "predicted_yield_kg": final_yield,
             "confidence_interval": {
                 "lower": lower_bound,
                 "upper": upper_bound
             },
-            "recommendation": recommendation
+            "recommendation": recommendation,
+            "data_note": data_note
         }
 
     except Exception as e:

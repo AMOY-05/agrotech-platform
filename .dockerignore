@@ -2,15 +2,14 @@ venv/
 __pycache__/
 *.pyc
 *.pyo
-*.pyd
 .env
 .git/
 .gitignore
 tests/
 notebooks/
-*.pkl
 streamlit_app.py
 test_places.py
+test_real_apis.py
 README.md
-docker/
 .pytest_cache/
+# Note: data/real/ is NOT ignored — needed for production
