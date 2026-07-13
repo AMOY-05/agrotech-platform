@@ -72,10 +72,15 @@ class TestPriceEstimation:
 
     def test_price_includes_inflation(self):
         # Price today should be higher than base price (due to inflation since 2024)
-        from app.services.price_service import BASE_PRICES
-        base = BASE_PRICES["tomato"]["lagos"]
+        from app.services.price_service import FALLBACK_BASE_PRICES
+        from app.services.price_service import _estimate_price
+        from datetime import datetime
+
+        # Get base price for tomato in Lagos
+        base = FALLBACK_BASE_PRICES["tomato"]["lagos"]
+        # Get current estimated price (should include inflation)
         current = _estimate_price("tomato", "lagos", datetime.now())
-        assert current > base  # inflation should have pushed price up
+        assert current > base  # inflation since 2024 should push price up
 
     def test_seasonal_variation_exists(self):
         # Feb (peak dry season) should be more expensive than Oct (post-harvest glut)
