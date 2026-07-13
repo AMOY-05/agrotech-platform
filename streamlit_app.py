@@ -329,10 +329,25 @@ if not st.session_state.authenticated:
     show_auth_page()
     st.stop()
 
-
 # ─────────────────────────────────────────────
 # MAIN APP (only shown after login)
 # ─────────────────────────────────────────────
+
+# ── Server Wake-up Check ──
+if "server_checked" not in st.session_state:
+    with st.spinner("Connecting to AgroTech servers..."):
+        try:
+            health = requests.get(
+                f"{API_BASE_URL}/health",
+                timeout=60  # wait up to 60s for cold start
+            )
+            if health.status_code == 200:
+                st.session_state.server_checked = True
+        except Exception:
+            st.warning(
+                "⏳ Server is starting up — this takes about 30 seconds. "
+                "Please wait..."
+            )
 
 st.markdown(f"""
 <div class="main-header">
@@ -856,7 +871,10 @@ def send_message(user_input: str):
     })
 
     try:
-        with st.spinner("AgroBot is thinking..."):
+        with st.spinner(
+            "AgroBot is thinking... "
+            "(first response may take 30-60 seconds if server just woke up)"
+        ):
             response = requests.post(
                 f"{API_BASE_URL}/agent/chat",
                 json={
@@ -864,7 +882,7 @@ def send_message(user_input: str):
                     "farmer_id": st.session_state.farmer_id,
                     "preferred_language": st.session_state.preferred_language
                 },
-                timeout=30
+                timeout=90  # increased to handle cold starts
             )
 
         if response.status_code == 200:

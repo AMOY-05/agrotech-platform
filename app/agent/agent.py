@@ -10,20 +10,28 @@ client = Groq(api_key=settings.groq_api_key)
 
 def _sanitize_reply(content: str) -> str:
     """
-    Removes any accidentally leaked JSON from agent replies.
-    This can happen when context extraction bleeds into conversation.
+    Cleans agent reply of any leaked HTML, JSON, or formatting artifacts.
     """
-    import re
+    if not content:
+        return "I couldn't generate a response. Please try again."
 
-    # Remove standalone JSON objects that look like context extractions
-    # Pattern: a JSON object containing farmer context keys at the start of reply
-    context_json_pattern = r'^\s*\{[^{}]*"crop_type"[^{}]*\}\s*'
-    content = re.sub(context_json_pattern, "", content, flags=re.DOTALL).strip()
+    # Remove leaked JSON context objects
+    content = re.sub(
+        r'^\s*\{[^{}]*"crop_type"[^{}]*\}\s*',
+        "", content, flags=re.DOTALL
+    ).strip()
 
-    # Also remove JSON code blocks
-    content = re.sub(r"```json.*?```", "", content, flags=re.DOTALL).strip()
+    # Remove HTML tags completely
+    content = re.sub(r'<[^>]+>', '', content)
 
-    return content if content else "I processed your request. Please try again."
+    # Remove markdown code blocks
+    content = re.sub(r'```json.*?```', '', content, flags=re.DOTALL)
+    content = re.sub(r'```.*?```', '', content, flags=re.DOTALL)
+
+    # Remove excessive whitespace
+    content = re.sub(r'\n{3,}', '\n\n', content).strip()
+
+    return content if content else "I couldn't generate a response. Please try again."
 
 BASE_SYSTEM_PROMPT = """
 You are AgroBot, an expert AI assistant for Nigerian farmers and agribusiness professionals.

@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from datetime import datetime
 from app.models.schemas import HealthResponse
 from app.core.config import settings
 from app.services.real_data_service import get_data_quality_report
@@ -17,3 +18,8 @@ async def health_check():
     version=settings.app_version,
     platform=settings.app_name
   )
+
+@router.get("/ping", tags=["System"])
+async def ping():
+    """Lightweight ping endpoint for uptime monitoring."""
+    return {"status": "alive", "timestamp": datetime.utcnow().isoformat()}
