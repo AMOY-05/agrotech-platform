@@ -697,6 +697,10 @@ with st.expander("📸 Upload Crop Photo for Disease Detection", expanded=False)
                                 error_msg += "\n\n**💡 Tips for better results:**\n"
                                 error_msg += "\n".join(f"• {s}" for s in suggestions)
                             st.error(error_msg)
+                    else:
+                        st.error("❌ Could not analyze crop photo. Please try again.")
+                except Exception as e:
+                    st.error(f"❌ Error analyzing crop photo: {e}")
 
 
 # ─────────────────────────────────────────────
