@@ -628,32 +628,60 @@ with st.expander("📸 Upload Crop Photo for Disease Detection", expanded=False)
                             prevention = result.get("prevention", "")
                             yield_impact = result.get("estimated_yield_impact", "")
                             symptoms = result.get("symptoms_visible", [])
+                            affected_parts = result.get("affected_parts", [])
+                            spread_risk = result.get("spread_risk", "")
+                            progression = result.get("progression_stage", "")
+                            when_expert = result.get("when_to_seek_expert", "")
+                            possible_causes = result.get("possible_causes", [])
+                            issue_category = result.get("issue_category", "")
+                            visual_evidence = result.get("visual_evidence", "")
 
                             urgency_emoji = {
-                                "low": "🟢", "medium": "🟡", "high": "🔴"
+                                "low": "🟢", "medium": "🟡",
+                                "high": "🔴", "critical": "🆘"
                             }.get(urgency, "🟡")
+
                             severity_emoji = {
-                                "mild": "😐", "moderate": "😟", "severe": "😱"
+                                "early": "😐", "moderate": "😟", "severe": "😱"
                             }.get(severity, "😟")
 
-                            reply = f"""📸 **Photo Analysis Complete**
+                            spread_emoji = {
+                                "low": "🟢", "medium": "🟡", "high": "🔴"
+                            }.get(spread_risk, "🟡")
 
-**Crop Identified:** {crop_name.title()}
-**Issue Detected:** {issue}
-**Confidence:** {confidence:.0%}
-**Severity:** {severity_emoji} {severity.title()}
-**Urgency:** {urgency_emoji} {urgency.title()}
+                            reply = f"""📸 **Crop Photo Analysis Complete**
 
-**Symptoms Visible:**
-{chr(10).join(f"• {s}" for s in symptoms) if symptoms else "• See image"}
+                        🌱 **Crop Identified:** {crop_name.title()}
+                        🔍 **Issue:** {issue}
+                        📂 **Category:** {issue_category.title() if issue_category else 'Unknown'}
+                        📊 **Confidence:** {confidence:.0%}
+                        {severity_emoji} **Severity:** {severity.title() if severity else 'Unknown'}
+                        {urgency_emoji} **Urgency:** {urgency.title() if urgency else 'Medium'}
+                        📈 **Progression:** {progression.title() if progression else 'Unknown'}
+                        {spread_emoji} **Spread Risk:** {spread_risk.title() if spread_risk else 'Unknown'}
 
-**Treatment:**
-{treatment}
+                        **👁️ Symptoms Visible:**
+                        {chr(10).join(f"• {s}" for s in symptoms) if symptoms else "• See image"}
 
-**Prevention for Future:**
-{prevention}
+                        **🎯 Affected Parts:** {', '.join(affected_parts) if affected_parts else 'Unknown'}
 
-**Estimated Yield Impact if Untreated:** {yield_impact}"""
+                        **💊 Treatment:**
+                        {treatment}
+
+                        **🛡️ Prevention:**
+                        {prevention}
+
+                        **📉 Yield Impact if Untreated:** {yield_impact}
+
+                        **👨‍⚕️ When to Seek Expert Help:**
+                        {when_expert if when_expert else 'Contact your local agricultural extension officer if symptoms worsen'}"""
+
+                            if possible_causes:
+                                reply += f"\n\n**🔄 Other Possible Causes:**\n"
+                                reply += "\n".join(f"• {c}" for c in possible_causes)
+
+                            if visual_evidence:
+                                reply += f"\n\n*Visual evidence: {visual_evidence}*"
 
                             st.session_state.messages.append({
                                 "role": "assistant",
@@ -662,14 +690,13 @@ with st.expander("📸 Upload Crop Photo for Disease Detection", expanded=False)
                             })
                             st.rerun()
                         else:
-                            st.error(f"❌ {result.get('error', 'Analysis failed')}")
-                    else:
-                        st.error(f"❌ Server error: {response.status_code}")
-
-                except requests.exceptions.Timeout:
-                    st.error("⚠️ Analysis timed out. Please try again.")
-                except Exception as e:
-                    st.error(f"❌ Error: {e}")
+                            error = result.get("error", "Analysis failed")
+                            suggestions = result.get("improvement_suggestions", [])
+                            error_msg = f"❌ {error}"
+                            if suggestions:
+                                error_msg += "\n\n**💡 Tips for better results:**\n"
+                                error_msg += "\n".join(f"• {s}" for s in suggestions)
+                            st.error(error_msg)
 
 
 # ─────────────────────────────────────────────

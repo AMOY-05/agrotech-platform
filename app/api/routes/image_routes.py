@@ -13,14 +13,23 @@ class ImageAnalysisResponse(BaseModel):
     message: str
     timestamp: datetime
     crop_identified: Optional[str] = None
+    crop_confidence: Optional[float] = None
+    visual_evidence: Optional[str] = None
     detected_issue: Optional[str] = None
+    issue_category: Optional[str] = None
     confidence: Optional[float] = None
     severity: Optional[str] = None
     urgency: Optional[str] = None
+    progression_stage: Optional[str] = None
     symptoms_visible: Optional[list] = []
+    affected_parts: Optional[list] = []
+    spread_risk: Optional[str] = None
     treatment: Optional[str] = None
     prevention: Optional[str] = None
     estimated_yield_impact: Optional[str] = None
+    when_to_seek_expert: Optional[str] = None
+    possible_causes: Optional[list] = []
+    improvement_suggestions: Optional[list] = []
     error: Optional[str] = None
 
 
@@ -64,12 +73,37 @@ async def analyze_image(
             known_crop_type=crop_type
         )
 
-        if not result["success"]:
+        if result["success"]:
+            analysis = result["analysis"]
+            return ImageAnalysisResponse(
+                success=True,
+                message="Image analysis complete",
+                timestamp=datetime.utcnow(),
+                crop_identified=result.get("crop_identified"),
+                crop_confidence=result.get("crop_confidence"),
+                visual_evidence=result.get("visual_evidence"),
+                detected_issue=analysis.get("detected_issue"),
+                issue_category=analysis.get("issue_category"),
+                confidence=float(analysis.get("confidence", 0.0)),
+                severity=analysis.get("severity"),
+                urgency=analysis.get("urgency"),
+                progression_stage=analysis.get("progression_stage"),
+                symptoms_visible=analysis.get("symptoms_visible", []),
+                affected_parts=analysis.get("affected_parts", []),
+                spread_risk=analysis.get("spread_risk"),
+                treatment=analysis.get("treatment"),
+                prevention=analysis.get("prevention"),
+                estimated_yield_impact=analysis.get("estimated_yield_impact"),
+                when_to_seek_expert=analysis.get("when_to_seek_expert"),
+                possible_causes=analysis.get("possible_causes", [])
+            )
+        else:
             return ImageAnalysisResponse(
                 success=False,
-                message="Image analysis failed",
+                message=result.get("message", "Analysis failed"),
                 timestamp=datetime.utcnow(),
-                error=result.get("error", "Unknown error")
+                error=result.get("error"),
+                improvement_suggestions=result.get("improvement_suggestions", [])
             )
 
         analysis = result["analysis"]
