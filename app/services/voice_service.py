@@ -42,53 +42,39 @@ async def transcribe_audio(
     language_hint: Optional[str] = None
 ) -> dict:
     """
-    Transcribes audio using Groq's Whisper model.
-    Supports English, Yoruba, Hausa, Igbo, and Nigerian Pidgin.
+    Transcribes audio using best available model.
+    Routes to Meta MMS for African languages, Whisper for others.
     """
-    logger.info(f"Transcribing audio: {len(audio_bytes)} bytes, "
-                f"filename={filename}, language_hint={language_hint}")
+    from app.services.mms_service import smart_transcribe
 
-    try:
-        # Determine Whisper language code
-        whisper_lang = None
-        if language_hint and language_hint in SUPPORTED_LANGUAGES:
-            whisper_lang = SUPPORTED_LANGUAGES[language_hint]
+    language = language_hint or "english"
+    logger.info(
+        f"Transcribing: {len(audio_bytes)} bytes, "
+        f"language={language}, file={filename}"
+    )
 
-        # Create file-like object for Groq API
-        audio_file = (filename, io.BytesIO(audio_bytes), _get_audio_mime(filename))
+    result = await smart_transcribe(
+        audio_bytes=audio_bytes,
+        filename=filename,
+        preferred_language=language
+    )
 
-        # Transcribe with Whisper
-        transcription_params = {
-            "file": audio_file,
-            "model": "whisper-large-v3",
-            "response_format": "verbose_json",  # gives us language detection too
-            "temperature": 0.0
-        }
-
-        if whisper_lang:
-            transcription_params["language"] = whisper_lang
-
-        logger.info("Sending audio to Groq Whisper model...")
-        response = client.audio.transcriptions.create(**transcription_params)
-
-        transcribed_text = response.text.strip()
-        detected_language = getattr(response, "language", language_hint or "english")
-
-        logger.info(f"Transcription complete: '{transcribed_text[:80]}...' "
-                   f"(detected_language: {detected_language})")
-
+    if result["success"]:
+        logger.info(
+            f"Transcription complete using {result['model_used']}: "
+            f"'{result['transcribed_text'][:80]}'"
+        )
         return {
             "success": True,
-            "transcribed_text": transcribed_text,
-            "detected_language": detected_language,
-            "duration_seconds": getattr(response, "duration", None)
+            "transcribed_text": result["transcribed_text"],
+            "detected_language": result["detected_language"],
+            "model_used": result["model_used"],
+            "duration_seconds": result.get("duration_seconds")
         }
-
-    except Exception as e:
-        logger.error(f"Transcription failed: {e}")
+    else:
         return {
             "success": False,
-            "error": str(e)
+            "error": result.get("error", "Transcription failed")
         }
 
 

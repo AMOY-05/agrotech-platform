@@ -1,37 +1,191 @@
 import re
+import json
 from groq import Groq
 from app.core.config import settings
 from app.agent.tools import AGENT_TOOLS, run_tool
 from app.agent.memory import get_session, extract_and_update_context, FarmerSession
+from app.services.claude_service import ask_claude, AGROTECH_SYSTEM_PROMPT
 from loguru import logger
-import json
 
-client = Groq(api_key=settings.groq_api_key)
+# Keep Groq for tool calling (Claude tool calling has different API)
+groq_client = Groq(api_key=settings.groq_api_key)
+
+KNOWN_TOOLS = {
+    "detect_pest_disease", "forecast_price",
+    "predict_yield", "find_nearby_stores"
+}
+
+MAX_TOOL_ROUNDS = 3
+
+
+def _build_system_prompt(session: FarmerSession) -> str:
+    """Builds personalized system prompt with farmer context."""
+    context_summary = session.get_context_summary()
+    if context_summary:
+        return AGROTECH_SYSTEM_PROMPT + f"\n\n{context_summary}\n"
+    return AGROTECH_SYSTEM_PROMPT
+
 
 def _sanitize_reply(content: str) -> str:
-    """
-    Cleans agent reply of any leaked HTML, JSON, or formatting artifacts.
-    """
+    """Removes HTML tags, JSON leaks, and formatting artifacts."""
     if not content:
         return "I couldn't generate a response. Please try again."
 
-    # Remove leaked JSON context objects
     content = re.sub(
         r'^\s*\{[^{}]*"crop_type"[^{}]*\}\s*',
         "", content, flags=re.DOTALL
     ).strip()
-
-    # Remove HTML tags completely
     content = re.sub(r'<[^>]+>', '', content)
-
-    # Remove markdown code blocks
     content = re.sub(r'```json.*?```', '', content, flags=re.DOTALL)
     content = re.sub(r'```.*?```', '', content, flags=re.DOTALL)
-
-    # Remove excessive whitespace
     content = re.sub(r'\n{3,}', '\n\n', content).strip()
 
     return content if content else "I couldn't generate a response. Please try again."
+
+
+async def run_agent(
+    user_message: str,
+    farmer_id: str = "anonymous",
+    crop_context: str = None
+) -> dict:
+    """
+    Main agent loop:
+    - Uses Groq for tool calling (fast, reliable)
+    - Uses Claude Sonnet for final response synthesis (high quality)
+    """
+    session = get_session(farmer_id)
+    await extract_and_update_context(session, user_message)
+
+    if crop_context:
+        session.update_context(crop_type=crop_context)
+
+    system_prompt = _build_system_prompt(session)
+
+    # Build conversation for Groq tool calling
+    groq_messages = [{"role": "system", "content": system_prompt}]
+    groq_messages.extend(session.messages)
+    groq_messages.append({"role": "user", "content": user_message})
+
+    tools_used = []
+    tool_results_summary = []
+
+    try:
+        # ── Phase 1: Tool Calling via Groq ──
+        for round_num in range(MAX_TOOL_ROUNDS):
+            logger.info(f"Agent [{farmer_id}]: tool round {round_num + 1}")
+
+            response = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=groq_messages,
+                tools=AGENT_TOOLS,
+                tool_choice="auto",
+                temperature=0.3,
+                max_tokens=500
+            )
+
+            response_message = response.choices[0].message
+
+            if not response_message.tool_calls:
+                # No more tools needed
+                logger.info(
+                    f"Agent [{farmer_id}]: no tools needed after "
+                    f"{round_num + 1} rounds"
+                )
+                break
+
+            # Execute tool calls
+            groq_messages.append(response_message)
+
+            for tool_call in response_message.tool_calls:
+                tool_name = tool_call.function.name
+                tool_args = json.loads(tool_call.function.arguments)
+
+                if tool_name not in KNOWN_TOOLS:
+                    logger.warning(
+                        f"Agent [{farmer_id}]: unknown tool '{tool_name}'"
+                    )
+                    groq_messages.append({
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "content": json.dumps({
+                            "error": f"Tool '{tool_name}' not available.",
+                            "instruction": "Answer from your agricultural knowledge instead."
+                        })
+                    })
+                    continue
+
+                # Fill from session context if missing
+                if "crop_type" in tool_args and not tool_args.get("crop_type"):
+                    tool_args["crop_type"] = session.context.get(
+                        "crop_type", "unknown"
+                    )
+                if "region" in tool_args and not tool_args.get("region"):
+                    tool_args["region"] = session.context.get("region", "Lagos")
+
+                logger.info(
+                    f"Agent [{farmer_id}]: calling '{tool_name}' "
+                    f"with {tool_args}"
+                )
+
+                tool_result = await run_tool(tool_name, tool_args)
+                tools_used.append(tool_name)
+                tool_results_summary.append({
+                    "tool": tool_name,
+                    "args": tool_args,
+                    "result": tool_result
+                })
+
+                groq_messages.append({
+                    "role": "tool",
+                    "tool_call_id": tool_call.id,
+                    "content": json.dumps(tool_result)
+                })
+
+        # ── Phase 2: Final Response via Claude Sonnet ──
+        # Build a rich context message for Claude
+        if tool_results_summary:
+            tool_context = "\n\n".join([
+                f"**{t['tool']}** for {t['args']}:\n{json.dumps(t['result'], indent=2)}"
+                for t in tool_results_summary
+            ])
+
+            claude_prompt = f"""A Nigerian farmer asked: "{user_message}"
+
+I gathered the following real data from our tools:
+
+{tool_context}
+
+Please synthesize this data into a clear, practical, conversational response 
+for the farmer. Mention specific numbers, recommend concrete next steps, 
+and include costs in Naira where relevant. Be warm and direct."""
+
+        else:
+            claude_prompt = user_message
+
+        logger.info(f"Agent [{farmer_id}]: generating final response with Claude Sonnet")
+
+        final_reply = await ask_claude(
+            user_message=claude_prompt,
+            system_prompt=system_prompt,
+            temperature=0.7,
+            max_tokens=1024
+        )
+
+        final_reply = _sanitize_reply(final_reply)
+
+        # Save to session
+        session.add_message("user", user_message)
+        session.add_message("assistant", final_reply)
+
+        return {
+            "reply": final_reply,
+            "tools_used": tools_used,
+            "session_context": session.context
+        }
+
+    except Exception as e:
+        logger.error(f"Agent [{farmer_id}] failed: {e}")
+        raise Exception(f"Agent error: {str(e)}")
 
 BASE_SYSTEM_PROMPT = """
 You are AgroBot, an expert AI assistant for Nigerian farmers and agribusiness professionals.

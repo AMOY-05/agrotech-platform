@@ -38,6 +38,10 @@ class Settings(BaseSettings):
     
     streamlit_app_url: str = "https://agrotechintelligence.streamlit.app"
 
+    # New AI providers
+    anthropic_api_key: Optional[str] = None
+    huggingface_token: Optional[str] = None
+
     model_config = {
         "env_file": Path(__file__).parent.parent.parent / ".env",
         "env_file_encoding": "utf-8",
