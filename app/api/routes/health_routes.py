@@ -23,3 +23,13 @@ async def health_check():
 async def ping():
     """Lightweight ping endpoint for uptime monitoring."""
     return {"status": "alive", "timestamp": datetime.utcnow().isoformat()}
+
+from datetime import datetime
+
+@router.get("/ping", tags=["System"])
+async def ping():
+    """Lightweight ping for cron job keep-alive."""
+    return {
+        "status": "alive",
+        "timestamp": datetime.utcnow().isoformat()
+    }

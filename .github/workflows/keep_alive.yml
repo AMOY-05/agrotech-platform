@@ -1,0 +1,59 @@
+name: Keep AgroTech Services Alive
+
+on:
+  schedule:
+    # Runs every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  ping-api:
+    name: Ping FastAPI Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render API
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            https://agrotech-api-ooi0.onrender.com/api/v1/ping \
+            --max-time 30)
+          echo "API Response: $response"
+          if [ "$response" = "200" ]; then
+            echo "✅ API is alive"
+          else
+            echo "⚠️ API returned $response"
+          fi
+
+  ping-streamlit:
+    name: Ping Streamlit Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit App
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            https://agrotechintelligence.streamlit.app \
+            --max-time 30)
+          echo "Streamlit Response: $response"
+          if [ "$response" = "200" ]; then
+            echo "✅ Streamlit is alive"
+          else
+            echo "⚠️ Streamlit returned $response"
+          fi
+
+  ping-telegram-webhook:
+    name: Verify Telegram Webhook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Telegram webhook is registered
+        run: |
+          response=$(curl -s \
+            "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/getWebhookInfo")
+          echo "Webhook Info: $response"
+          url=$(echo $response | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['url'])")
+          echo "Webhook URL: $url"
+          if [[ "$url" == *"onrender.com"* ]]; then
+            echo "✅ Telegram webhook is correctly set"
+          else
+            echo "⚠️ Telegram webhook may be wrong: $url"
+            # Auto-fix: re-set the webhook
+            curl -s "https://agrotech-api-ooi0.onrender.com/api/v1/telegram/set-webhook?webhook_url=https://agrotech-api-ooi0.onrender.com"
+          fi
