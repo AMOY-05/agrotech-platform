@@ -15,12 +15,12 @@ jobs:
           echo "Pinging Render API..."
           response=$(curl -s -o /dev/null -w "%{http_code}" \
             https://agrotech-api-ooi0.onrender.com/api/v1/ping \
-            --max-time 60 || echo "timeout")
+            --max-time 60 || echo "000")
           echo "API Response: $response"
           if [ "$response" = "200" ]; then
-            echo "✅ API is alive"
+            echo "API is alive"
           else
-            echo "⚠️ API returned $response (may have been sleeping — woke it up)"
+            echo "API returned $response - may have been sleeping, woke it up"
           fi
         continue-on-error: true
 
@@ -29,12 +29,12 @@ jobs:
           echo "Pinging Streamlit..."
           response=$(curl -s -o /dev/null -w "%{http_code}" \
             https://agrotechintelligence.streamlit.app \
-            --max-time 60 || echo "timeout")
+            --max-time 60 || echo "000")
           echo "Streamlit Response: $response"
           if [ "$response" = "200" ]; then
-            echo "✅ Streamlit is alive"
+            echo "Streamlit is alive"
           else
-            echo "⚠️ Streamlit returned $response"
+            echo "Streamlit returned $response"
           fi
         continue-on-error: true
 
@@ -45,19 +45,21 @@ jobs:
             "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/getWebhookInfo" \
             --max-time 15 || echo "{}")
           echo "Webhook response received"
-          url=$(echo $response | python3 -c \
-            "import sys,json
+          url=$(echo "$response" | python3 -c "
+import sys, json
 try:
     data = json.load(sys.stdin)
     print(data.get('result', {}).get('url', 'unknown'))
-except:
-    print('parse_error')" 2>/dev/null || echo "unknown")
+except Exception:
+    print('parse_error')
+" || echo "unknown")
           echo "Webhook URL: $url"
           if [[ "$url" == *"onrender.com"* ]]; then
-            echo "✅ Telegram webhook correctly set"
+            echo "Telegram webhook is correctly set"
           else
-            echo "⚠️ Re-setting Telegram webhook..."
-            curl -s "https://agrotech-api-ooi0.onrender.com/api/v1/telegram/set-webhook?webhook_url=https://agrotech-api-ooi0.onrender.com" \
+            echo "Re-setting Telegram webhook..."
+            curl -s \
+              "https://agrotech-api-ooi0.onrender.com/api/v1/telegram/set-webhook?webhook_url=https://agrotech-api-ooi0.onrender.com" \
               --max-time 60 || echo "Webhook reset attempted"
           fi
         continue-on-error: true
