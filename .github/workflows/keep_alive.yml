@@ -2,58 +2,62 @@ name: Keep AgroTech Services Alive
 
 on:
   schedule:
-    # Runs every 5 minutes
     - cron: '*/5 * * * *'
-  workflow_dispatch: # Allow manual trigger
+  workflow_dispatch:
 
 jobs:
-  ping-api:
-    name: Ping FastAPI Backend
+  ping-services:
+    name: Ping All Services
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Render API
+      - name: Ping FastAPI Backend
         run: |
+          echo "Pinging Render API..."
           response=$(curl -s -o /dev/null -w "%{http_code}" \
             https://agrotech-api-ooi0.onrender.com/api/v1/ping \
-            --max-time 30)
+            --max-time 60 || echo "timeout")
           echo "API Response: $response"
           if [ "$response" = "200" ]; then
             echo "✅ API is alive"
           else
-            echo "⚠️ API returned $response"
+            echo "⚠️ API returned $response (may have been sleeping — woke it up)"
           fi
+        continue-on-error: true
 
-  ping-streamlit:
-    name: Ping Streamlit Frontend
-    runs-on: ubuntu-latest
-    steps:
-      - name: Ping Streamlit App
+      - name: Ping Streamlit Frontend
         run: |
+          echo "Pinging Streamlit..."
           response=$(curl -s -o /dev/null -w "%{http_code}" \
             https://agrotechintelligence.streamlit.app \
-            --max-time 30)
+            --max-time 60 || echo "timeout")
           echo "Streamlit Response: $response"
           if [ "$response" = "200" ]; then
             echo "✅ Streamlit is alive"
           else
             echo "⚠️ Streamlit returned $response"
           fi
+        continue-on-error: true
 
-  ping-telegram-webhook:
-    name: Verify Telegram Webhook
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check Telegram webhook is registered
+      - name: Verify Telegram Webhook
         run: |
+          echo "Checking Telegram webhook..."
           response=$(curl -s \
-            "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/getWebhookInfo")
-          echo "Webhook Info: $response"
-          url=$(echo $response | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['url'])")
+            "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/getWebhookInfo" \
+            --max-time 15 || echo "{}")
+          echo "Webhook response received"
+          url=$(echo $response | python3 -c \
+            "import sys,json
+try:
+    data = json.load(sys.stdin)
+    print(data.get('result', {}).get('url', 'unknown'))
+except:
+    print('parse_error')" 2>/dev/null || echo "unknown")
           echo "Webhook URL: $url"
           if [[ "$url" == *"onrender.com"* ]]; then
-            echo "✅ Telegram webhook is correctly set"
+            echo "✅ Telegram webhook correctly set"
           else
-            echo "⚠️ Telegram webhook may be wrong: $url"
-            # Auto-fix: re-set the webhook
-            curl -s "https://agrotech-api-ooi0.onrender.com/api/v1/telegram/set-webhook?webhook_url=https://agrotech-api-ooi0.onrender.com"
+            echo "⚠️ Re-setting Telegram webhook..."
+            curl -s "https://agrotech-api-ooi0.onrender.com/api/v1/telegram/set-webhook?webhook_url=https://agrotech-api-ooi0.onrender.com" \
+              --max-time 60 || echo "Webhook reset attempted"
           fi
+        continue-on-error: true
