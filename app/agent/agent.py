@@ -1,11 +1,14 @@
 import re
 import json
 from groq import Groq
+from requests import session
+from app.agent.redis_memory import save_session_redis
 from app.core.config import settings
 from app.agent.tools import AGENT_TOOLS, run_tool
 from app.agent.memory import get_session, extract_and_update_context, FarmerSession
 from app.services.claude_service import ask_claude, AGROTECH_SYSTEM_PROMPT
 from loguru import logger
+
 
 # Keep Groq for tool calling (Claude tool calling has different API)
 groq_client = Groq(api_key=settings.groq_api_key)
@@ -288,7 +291,7 @@ async def run_agent(
         for round_num in range(MAX_TOOL_ROUNDS):
             logger.info(f"Agent [{farmer_id}]: round {round_num + 1}")
 
-            response = client.chat.completions.create(
+            response = groq_client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
                 messages=messages,
                 tools=AGENT_TOOLS,
@@ -317,6 +320,9 @@ async def run_agent(
                 # Save to session memory
                 session.add_message("user", user_message)
                 session.add_message("assistant", content)
+
+                from app.agent.redis_memory import save_session_redis
+                save_session_redis(session)
 
                 logger.info(f"Agent [{farmer_id}]: returning final answer")
                 return {
@@ -364,7 +370,7 @@ async def run_agent(
 
         # --- Hit max rounds, force final answer ---
         logger.warning(f"Agent [{farmer_id}]: hit max tool rounds, forcing final answer")
-        final_response = client.chat.completions.create(
+        final_response = groq_client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=messages,
             temperature=0.7,
@@ -376,7 +382,7 @@ async def run_agent(
         session.add_message("assistant", final_content)
 
         return {
-            "reply": _sanitize_reply(content) if content else "I couldn't generate a response. Please try again.",
+            "reply": _sanitize_reply(final_content) if final_content else "I couldn't generate a response. Please try again.",
             "tools_used": tools_used,
             "session_context": session.context
         }

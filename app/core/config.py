@@ -42,6 +42,10 @@ class Settings(BaseSettings):
     anthropic_api_key: Optional[str] = None
     huggingface_token: Optional[str] = None
 
+    # Redis (Upstash)
+    redis_url: Optional[str] = None
+    redis_token: Optional[str] = None
+
     model_config = {
         "env_file": Path(__file__).parent.parent.parent / ".env",
         "env_file_encoding": "utf-8",
