@@ -29,3 +29,6 @@ Thumbs.db
 
 # Temp files
 test_places.py
+test_ai_services.py
+test_real_apis.py
+test_redis.py
