@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 # --- Config ---
-API_BASE_URL = os.environ.get("API_BASE_URL", "https://api.agrotechintelligence.site/api/v1")
+API_BASE_URL = os.environ.get("API_BASE_URL", "http://127.0.0.1:8000/api/v1")
 try:
     API_BASE_URL = st.secrets.get("API_BASE_URL", API_BASE_URL)
 except Exception:
