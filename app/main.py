@@ -30,21 +30,7 @@ app = FastAPI(
     description="AI-powered platform helping Nigerian farmers predict yields, detect pests, and time their market sales."
 )
 
-# CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "https://agrotechintelligence.site",
-        "https://www.agrotechintelligence.site",
-        "https://amoy-05.github.io",
-        "https://share.streamlit.io",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Logging Middleware
+# 1. Custom Logging Middleware (Added FIRST so CORS runs outside of it)
 class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         start = time.time()
@@ -54,6 +40,24 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         return response
 
 app.add_middleware(LoggingMiddleware)
+
+# 2. CORS Middleware (Added LAST so it wraps all outgoing responses and preflights)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://agrotechintelligence.site",
+        "https://www.agrotechintelligence.site",
+        "https://amoy-05.github.io",
+        "https://share.streamlit.io",
+        "http://localhost:8501",
+        "http://127.0.0.1:8501",
+    ],
+    # Matches any *.streamlit.app deployment domain automatically
+    allow_origin_regex=r"https://.*\.streamlit\.app",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Routers
 app.include_router(health_routes.router, prefix="/api/v1")
