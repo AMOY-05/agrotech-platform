@@ -33,7 +33,12 @@ app = FastAPI(
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://agrotechintelligence.site",
+        "https://www.agrotechintelligence.site",
+        "https://amoy-05.github.io",
+        "https://share.streamlit.io",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
