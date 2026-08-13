@@ -15,7 +15,7 @@ jobs:
         run: |
           curl -s -o /dev/null -w "API Status: %{http_code}\n" \
             --max-time 60 \
-            https://agrotech-api-ooi0.onrender.com/api/v1/ping || true
+            https://api.agrotechintelligence.site/api/v1/ping || true
 
   ping-streamlit:
     name: Ping Streamlit Frontend
@@ -26,7 +26,7 @@ jobs:
         run: |
           curl -s -o /dev/null -w "Streamlit Status: %{http_code}\n" \
             --max-time 60 \
-            https://agrotechintelligence.streamlit.app || true
+            https://app.agrotechintelligence.site || true
 
   ping-telegram:
     name: Ping Telegram Webhook
@@ -36,4 +36,4 @@ jobs:
         continue-on-error: true
         run: |
           curl -s --max-time 30 \
-            "https://agrotech-api-ooi0.onrender.com/api/v1/telegram/set-webhook?webhook_url=https://agrotech-api-ooi0.onrender.com" || true
+            "https://api.agrotechintelligence.site/api/v1/telegram/set-webhook?webhook_url=https://api.agrotechintelligence.site" || true
