@@ -3,6 +3,22 @@ import requests
 from datetime import datetime
 import os
 
+# Inject custom CSS to hide the footer and toolbar
+st.markdown(
+    """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Hides Streamlit bottom embed footer and fullscreen buttons */
+    div[class*="stAppFooter"] {display: none !important;}
+    footer[data-testid="stFooter"] {display: none !important;}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # --- Config ---
 API_BASE_URL = os.environ.get("API_BASE_URL", "https://agrotech-api-ooi0.onrender.com/api/v1")
 try:
