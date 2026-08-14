@@ -59,7 +59,7 @@ try:
 except Exception:
     pass
 
-APP_TITLE = "🌾 AgroTech Intelligence Platform"
+APP_TITLE = "🌾 AgroTech Intelligence"
 
 st.set_page_config(
     page_title="AgroTech AI",
