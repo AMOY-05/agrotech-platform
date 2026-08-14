@@ -4,6 +4,27 @@ from datetime import datetime
 import os
 import pandas as pd
 
+st.set_page_config(
+    page_title="AgroTech Intelligence",
+    page_icon="assets/logo.png",
+    layout="wide",
+    menu_items={"Get help": None, "Report a bug": None, "About": None},
+)
+
+st.markdown("""
+<style>
+#MainMenu, header, footer {visibility: hidden;}
+[data-testid="stHeader"],
+[data-testid="stToolbar"],
+[data-testid="stDecoration"],
+[data-testid="stStatusWidget"],
+[data-testid="stAppDeployButton"] {display: none !important;}
+button[title="View fullscreen"],
+[data-testid="StyledFullScreenButton"] {display: none !important;}
+.viewerBadge_container__1QSob {display: none !important;}
+.block-container {padding-top: 1rem;}
+</style>
+""", unsafe_allow_html=True)
 
 # Inject custom CSS to hide the footer and toolbar
 st.markdown(
