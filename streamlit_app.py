@@ -3,6 +3,32 @@ import requests
 from datetime import datetime
 import os
 
+#the entire app to automatically adapt its text contrast
+st.markdown("""
+    <style>
+    /* Force high text contrast across all inputs, select boxes, and paragraphs */
+    p, span, h1, h2, h3, h4, h5, h6, label {
+        color: var(--text-color) !important;
+    }
+    
+    /* Ensure input boxes adapt to system theme */
+    div[data-baseweb="input"] {
+        background-color: var(--secondary-background-color) !important;
+        color: var(--text-color) !important;
+    }
+    
+    /* Fix iframe embedded scrollbars */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #2d5a27;
+        border-radius: 4px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Inject custom CSS to hide the footer and toolbar
 st.markdown(
     """
@@ -19,6 +45,13 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# Hide pages from sidebar navigation — admin is secret
+st.markdown("""
+<style>
+    [data-testid="stSidebarNav"] {display: none;}
+</style>
+""", unsafe_allow_html=True)
+
 # --- Config ---
 API_BASE_URL = os.environ.get("API_BASE_URL", "https://agrotech-api-ooi0.onrender.com/api/v1")
 try:
@@ -34,12 +67,6 @@ st.set_page_config(
     layout="centered"
 )
 
-# Hide pages from sidebar navigation — admin is secret
-st.markdown("""
-<style>
-    [data-testid="stSidebarNav"] {display: none;}
-</style>
-""", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
