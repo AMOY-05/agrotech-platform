@@ -2,32 +2,8 @@ import streamlit as st
 import requests
 from datetime import datetime
 import os
+import pandas as pd
 
-#the entire app to automatically adapt its text contrast
-st.markdown("""
-    <style>
-    /* Force high text contrast across all inputs, select boxes, and paragraphs */
-    p, span, h1, h2, h3, h4, h5, h6, label {
-        color: var(--text-color) !important;
-    }
-    
-    /* Ensure input boxes adapt to system theme */
-    div[data-baseweb="input"] {
-        background-color: var(--secondary-background-color) !important;
-        color: var(--text-color) !important;
-    }
-    
-    /* Fix iframe embedded scrollbars */
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: #2d5a27;
-        border-radius: 4px;
-    }
-    </style>
-""", unsafe_allow_html=True)
 
 # Inject custom CSS to hide the footer and toolbar
 st.markdown(
@@ -68,66 +44,276 @@ st.set_page_config(
 )
 
 
+
 st.markdown("""
 <style>
-    .main-header {
-        background: linear-gradient(135deg, #2d5a27, #4a9e3f);
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        margin-bottom: 20px;
+/* =========================================================
+   AGROTECH SYSTEM-AWARE THEME
+   Automatically follows user's system Light/Dark mode
+   ========================================================= */
+
+/* ---------- Theme Variables ---------- */
+
+:root {
+    --app-bg: #ffffff;
+    --text-color: #1a1a1a;
+    --secondary-text: #666666;
+
+    --card-bg: #f0f7ee;
+    --bot-bg: #ffffff;
+    --bot-text: #000000;
+
+    --farmer-bg: #dcf8c6;
+    --farmer-text: #000000;
+
+    --border-color: #e0e0e0;
+
+    --warning-bg: #fff3cd;
+    --warning-text: #856404;
+    --warning-border: #ffc107;
+}
+
+/* ---------- DARK SYSTEM MODE ---------- */
+
+@media (prefers-color-scheme: dark) {
+
+    :root {
+        --app-bg: #0e1117;
+        --text-color: #f5f5f5;
+        --secondary-text: #b0b0b0;
+
+        --card-bg: #182218;
+        --bot-bg: #1e2329;
+        --bot-text: #f5f5f5;
+
+        --farmer-bg: #25452a;
+        --farmer-text: #ffffff;
+
+        --border-color: #3a3f45;
+
+        --warning-bg: #3b3218;
+        --warning-text: #ffe69c;
+        --warning-border: #d6a800;
     }
-    .farmer-bubble {
-        background: #dcf8c6;
-        padding: 12px 16px;
-        border-radius: 18px 18px 4px 18px;
-        margin: 8px 0;
-        margin-left: 20%;
-        color: #000;
+}
+
+
+/* ---------- Main Application ---------- */
+
+.stApp {
+    background-color: var(--app-bg);
+    color: var(--text-color);
+}
+
+
+/* ---------- General Text ---------- */
+
+.stApp p,
+.stApp h1,
+.stApp h2,
+.stApp h3,
+.stApp h4,
+.stApp h5,
+.stApp h6,
+.stApp label {
+    color: var(--text-color);
+}
+
+
+/* ---------- Main Header ---------- */
+
+.main-header {
+    background: linear-gradient(135deg, #2d5a27, #4a9e3f);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-header h1,
+.main-header p {
+    color: white !important;
+}
+
+
+/* ---------- Farmer Chat Bubble ---------- */
+
+.farmer-bubble {
+    background: var(--farmer-bg);
+    color: var(--farmer-text);
+
+    padding: 12px 16px;
+    border-radius: 18px 18px 4px 18px;
+    margin: 8px 0;
+    margin-left: 20%;
+}
+
+.farmer-bubble strong,
+.farmer-bubble b {
+    color: var(--farmer-text);
+}
+
+
+/* ---------- Bot Chat Bubble ---------- */
+
+.bot-bubble {
+    background: var(--bot-bg);
+    color: var(--bot-text);
+
+    padding: 12px 16px;
+    border-radius: 18px 18px 18px 4px;
+    margin: 8px 0;
+    margin-right: 20%;
+
+    border: 1px solid var(--border-color);
+}
+
+.bot-bubble strong,
+.bot-bubble b,
+.bot-bubble li {
+    color: var(--bot-text);
+}
+
+
+/* ---------- Tool Badge ---------- */
+
+.tool-badge {
+    background: #4a9e3f;
+    color: white;
+
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    margin-right: 4px;
+}
+
+
+/* ---------- Welcome Card ---------- */
+
+.welcome-card {
+    background: var(--card-bg);
+    color: var(--text-color);
+
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+
+    border-left: 4px solid #4a9e3f;
+}
+
+.welcome-card h4,
+.welcome-card p {
+    color: var(--text-color);
+}
+
+
+/* ---------- Google Button ---------- */
+
+.google-btn {
+    background: var(--bot-bg);
+    border: 2px solid #4285f4;
+    color: #4285f4;
+
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    margin: 10px 0;
+}
+
+
+/* ---------- Divider ---------- */
+
+.divider-text {
+    text-align: center;
+    color: var(--secondary-text);
+    margin: 10px 0;
+    font-size: 0.85em;
+}
+
+
+/* ---------- Data Warning Banner ---------- */
+
+.data-warning {
+    background: var(--warning-bg);
+    border-left: 4px solid var(--warning-border);
+
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+
+    font-size: 0.85em;
+    color: var(--warning-text);
+}
+
+.data-warning strong,
+.data-warning a {
+    color: var(--warning-text);
+}
+
+
+/* ---------- Streamlit Sidebar ---------- */
+
+[data-testid="stSidebar"] {
+    background-color: var(--app-bg);
+}
+
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] h4 {
+    color: var(--text-color);
+}
+
+
+/* ---------- Inputs ---------- */
+
+.stTextInput input,
+.stNumberInput input,
+.stSelectbox div[data-baseweb="select"],
+.stTextArea textarea {
+    color: var(--text-color);
+}
+
+
+/* ---------- Captions ---------- */
+
+.stCaption,
+[data-testid="stCaptionContainer"] {
+    color: var(--secondary-text);
+}
+
+
+/* ---------- Accessibility: Forced High Contrast ---------- */
+
+@media (forced-colors: active) {
+
+    .stApp {
+        background: Canvas;
+        color: CanvasText;
     }
-    .bot-bubble {
-        background: #ffffff;
-        padding: 12px 16px;
-        border-radius: 18px 18px 18px 4px;
-        margin: 8px 0;
-        margin-right: 20%;
-        border: 1px solid #e0e0e0;
-        color: #000;
-    }
-    .tool-badge {
-        background: #4a9e3f;
-        color: white;
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: 0.75em;
-        margin-right: 4px;
-    }
+
+    .main-header,
+    .farmer-bubble,
+    .bot-bubble,
     .welcome-card {
-        background: #f0f7ee;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 10px 0;
-        border-left: 4px solid #4a9e3f;
+        background: Canvas;
+        color: CanvasText;
+        border: 1px solid CanvasText;
     }
-    .google-btn {
-        background: white;
-        border: 2px solid #4285f4;
-        color: #4285f4;
-        border-radius: 8px;
-        padding: 10px;
-        text-align: center;
-        font-weight: bold;
-        text-decoration: none;
-        display: block;
-        margin: 10px 0;
+
+    button {
+        border: 1px solid ButtonText;
+        background: ButtonFace;
+        color: ButtonText;
     }
-    .divider-text {
-        text-align: center;
-        color: #888;
-        margin: 10px 0;
-        font-size: 0.85em;
-    }
+}
+
 </style>
 """, unsafe_allow_html=True)
 
