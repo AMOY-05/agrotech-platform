@@ -40,6 +40,26 @@ class User(Base):
         return f"<User {self.email} ({self.farmer_id})>"
 
 
+class PasswordResetToken(Base):
+    """One-time password reset links.
+
+    Only a SHA-256 hash of the token is stored — the raw value exists solely
+    in the email we send. A database leak therefore yields nothing usable.
+    """
+
+    __tablename__ = "password_reset_tokens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    farmer_id = Column(String, nullable=False, index=True)
+    token_hash = Column(String, nullable=False, unique=True, index=True)
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    used_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=utcnow)
+
+    def __repr__(self):
+        return f"<PasswordResetToken {self.farmer_id} used={self.used_at is not None}>"
+
+
 class PriceReport(Base):
     __tablename__ = "price_reports"
 
@@ -62,9 +82,8 @@ class PriceReport(Base):
 
 
 class Detection(Base):
-    """Every pest/disease detection your model makes. This is your core asset —
-    it proves model accuracy and underpins outbreak mapping. Log every call,
-    including the ones the farmer ignores."""
+    """Every pest/disease detection the model makes. Log every call, including
+    ones the farmer ignores — this is the record that proves model accuracy."""
 
     __tablename__ = "detections"
 
@@ -87,7 +106,7 @@ class Detection(Base):
     farmer_confirmed = Column(Boolean, nullable=True)
     corrected_label = Column(String, nullable=True)
 
-    # Referral tracking for the agro-dealer monetisation path.
+    # Referral tracking for the agro-dealer path.
     recommended_input = Column(String, nullable=True)
     referral_code = Column(String, nullable=True, index=True)
     referral_redeemed = Column(Boolean, default=False)
@@ -99,12 +118,12 @@ class Detection(Base):
     )
 
     def __repr__(self):
-        return f"<Detection {self.predicted_label} ({self.confidence:.2f}) @ {self.region}>"
+        return f"<Detection {self.predicted_label} @ {self.region}>"
 
 
 class YieldPrediction(Base):
-    """Every yield forecast, plus the actual harvest when the farmer reports it.
-    The pairing of predicted vs actual is what proves your model works."""
+    """Every yield forecast, plus the actual harvest once reported.
+    Predicted vs actual is what proves the model works."""
 
     __tablename__ = "yield_predictions"
 
@@ -119,7 +138,6 @@ class YieldPrediction(Base):
     model_version = Column(String, nullable=True)
     season = Column(String, nullable=True, index=True)
 
-    # Filled in after harvest — the ground truth.
     actual_yield_kg_per_ha = Column(Float, nullable=True)
     actual_reported_at = Column(DateTime(timezone=True), nullable=True)
 
@@ -130,8 +148,8 @@ class YieldPrediction(Base):
 
 
 class StoreReferral(Base):
-    """Agro-store lookups and whether they converted. This is the table you
-    show an agro-dealer or input company when asking them to pay you."""
+    """Agro-store lookups and whether they converted — the table you show an
+    agro-dealer or input company when asking them to pay you."""
 
     __tablename__ = "store_referrals"
 

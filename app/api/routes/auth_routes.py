@@ -1,13 +1,18 @@
 from fastapi import APIRouter, HTTPException, Depends, status
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from app.models.db.database import get_db
 from app.services.auth_service import (
     create_user, authenticate_user, get_user_by_email,
-    create_access_token, decode_token
+    create_access_token, decode_token, get_current_user,
+    create_password_reset_token, consume_password_reset_token,
+    set_user_password,
+)
+from app.services.email_service import (
+    send_email, reset_email_html, google_account_html,
 )
 from app.core.config import settings
 from loguru import logger
@@ -49,13 +54,33 @@ class UserProfileResponse(BaseModel):
     created_at: datetime
 
 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+    @field_validator("new_password")
+    @classmethod
+    def strong_enough(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("Password must be at least 8 characters")
+        return v
+
+
+class SimpleMessageResponse(BaseModel):
+    success: bool
+    message: str
+
+
 # --- Email Signup ---
 @router.post("/signup", response_model=AuthResponse, tags=["Authentication"])
 async def signup(request: SignupRequest, db: AsyncSession = Depends(get_db)):
     """Register a new farmer with email and password."""
     logger.info(f"Signup attempt: {request.email}")
 
-    # Check if email already exists
     existing = await get_user_by_email(db, request.email)
     if existing:
         raise HTTPException(
@@ -63,7 +88,6 @@ async def signup(request: SignupRequest, db: AsyncSession = Depends(get_db)):
             detail="An account with this email already exists. Please login instead."
         )
 
-    # Create user
     user = await create_user(
         db=db,
         email=request.email,
@@ -72,7 +96,6 @@ async def signup(request: SignupRequest, db: AsyncSession = Depends(get_db)):
         preferred_language=request.preferred_language
     )
 
-    # Generate token
     token = create_access_token({"sub": user.farmer_id, "email": user.email})
 
     return AuthResponse(
@@ -99,8 +122,7 @@ async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
             detail="Invalid email or password"
         )
 
-    # Update last login
-    user.last_login = datetime.utcnow()
+    user.last_login = datetime.now(timezone.utc)
     await db.commit()
 
     token = create_access_token({"sub": user.farmer_id, "email": user.email})
@@ -113,6 +135,81 @@ async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
         email=user.email,
         preferred_language=user.preferred_language,
         message=f"Welcome back, {user.full_name}!"
+    )
+
+
+# --- Forgot Password ---
+@router.post("/forgot-password", response_model=SimpleMessageResponse,
+             tags=["Authentication"])
+async def forgot_password(
+    request: ForgotPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Request a password reset link.
+
+    Always returns the same response whether or not the account exists.
+    Differentiating would let an attacker harvest your registered emails.
+    """
+    generic = SimpleMessageResponse(
+        success=True,
+        message=(
+            "If an account exists for that email, we've sent a reset link. "
+            "Check your inbox and spam folder."
+        ),
+    )
+
+    user = await get_user_by_email(db, request.email)
+    if not user:
+        logger.info(f"Reset requested for unknown email: {request.email}")
+        return generic
+
+    # Google-only accounts have no password to reset.
+    if not user.hashed_password and user.auth_provider == "google":
+        await send_email(
+            to=user.email,
+            subject="AgroTech — Sign in with Google",
+            html_body=google_account_html(user.full_name),
+        )
+        return generic
+
+    raw_token = await create_password_reset_token(db, user)
+
+    frontend = getattr(
+        settings, "streamlit_app_url", "https://agrotechintelligence.site"
+    ).rstrip("/")
+    reset_url = f"{frontend}/?reset_token={raw_token}"
+
+    await send_email(
+        to=user.email,
+        subject="Reset your AgroTech password",
+        html_body=reset_email_html(user.full_name, reset_url),
+    )
+
+    return generic
+
+
+# --- Reset Password ---
+@router.post("/reset-password", response_model=SimpleMessageResponse,
+             tags=["Authentication"])
+async def reset_password(
+    request: ResetPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Complete a password reset using the emailed token."""
+    farmer_id = await consume_password_reset_token(db, request.token)
+    if not farmer_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This reset link is invalid or has expired. Please request a new one.",
+        )
+
+    ok = await set_user_password(db, farmer_id, request.new_password)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Account not found")
+
+    return SimpleMessageResponse(
+        success=True,
+        message="Password updated. You can now log in with your new password.",
     )
 
 
@@ -179,19 +276,16 @@ async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
                 google_id=google_id
             )
 
-        user.last_login = datetime.utcnow()
+        user.last_login = datetime.now(timezone.utc)
         await db.commit()
 
         token = create_access_token({"sub": user.farmer_id, "email": user.email})
         streamlit_url = getattr(
-            settings, "streamlit_app_url",
-            "https://agrotechintelligence.site"
-        )
+            settings, "streamlit_app_url", "https://agrotechintelligence.site"
+        ).rstrip("/")
 
         logger.info(f"Google OAuth success: {email} → {user.farmer_id}")
 
-        # Return HTML page that stores token in localStorage
-        # then redirects to Streamlit
         html_content = f"""
             <!DOCTYPE html>
             <html>
@@ -237,13 +331,11 @@ async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
                     <p id="status">Redirecting to your dashboard...</p>
                 </div>
                 <script>
-                    // Store auth data in sessionStorage
                     sessionStorage.setItem('agrotech_token', '{token}');
                     sessionStorage.setItem('agrotech_farmer_id', '{user.farmer_id}');
                     sessionStorage.setItem('agrotech_name', '{full_name}');
                     sessionStorage.setItem('agrotech_language', '{user.preferred_language}');
 
-                    // Redirect to Streamlit with token in URL
                     setTimeout(function() {{
                         window.location.href = '{streamlit_url}?token={token}&farmer_id={user.farmer_id}&name={full_name}&language={user.preferred_language}';
                     }}, 1500);
@@ -251,7 +343,6 @@ async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
             </body>
             </html>
             """
-        from fastapi.responses import HTMLResponse
         return HTMLResponse(content=html_content)
 
     except Exception as e:

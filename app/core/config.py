@@ -36,6 +36,12 @@ class Settings(BaseSettings):
     # Telegram Bot
     telegram_bot_token: Optional[str] = None
     
+
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from: str = "noreply@agrotechintelligence.site"
     streamlit_app_url: str = "https://agrotechintelligence.site"
 
     # New AI providers

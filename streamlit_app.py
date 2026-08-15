@@ -6,25 +6,29 @@ import pandas as pd
 
 APP_TITLE = "🌾 AgroTech Intelligence"
 
-st.set_page_config(page_title="AgroTech AI", page_icon="🌾", layout="centered",
+st.set_page_config(
+    page_title="AgroTech Intelligence",
+    page_icon="🌾",
+    layout="centered",
 )
 
-@st.cache_resource
-def get_model():
-    try:
-        import importlib
-        tf = importlib.import_module("tensorflow")
-        return tf.keras.models.load_model("models/pest_cnn.h5")
-    except ModuleNotFoundError:
-        st.error("TensorFlow is not installed in this environment. Install it with: pip install tensorflow")
-        raise RuntimeError("TensorFlow is required to run the pest detection model.")
+# --- Config ---
+API_BASE_URL = os.environ.get(
+    "API_BASE_URL", "https://agrotech-api-ooi0.onrender.com/api/v1"
+)
+try:
+    API_BASE_URL = st.secrets.get("API_BASE_URL", API_BASE_URL)
+except Exception:
+    pass
 
-@st.cache_data(ttl=1800)
-def fetch_weather(lat, lon):
-    return requests.get(...).json()
+
+# ─────────────────────────────────────────────
+# STYLES  (single consolidated block)
+# ─────────────────────────────────────────────
 
 st.markdown("""
 <style>
+/* ---------- Hide Streamlit chrome ---------- */
 #MainMenu, header, footer {visibility: hidden;}
 [data-testid="stHeader"],
 [data-testid="stToolbar"],
@@ -33,51 +37,16 @@ st.markdown("""
 [data-testid="stAppDeployButton"] {display: none !important;}
 button[title="View fullscreen"],
 [data-testid="StyledFullScreenButton"] {display: none !important;}
+div[class*="stAppFooter"] {display: none !important;}
+footer[data-testid="stFooter"] {display: none !important;}
 .viewerBadge_container__1QSob {display: none !important;}
+[data-testid="stSidebarNav"] {display: none;}
 .block-container {padding-top: 1rem;}
-</style>
-""", unsafe_allow_html=True)
 
-# Inject custom CSS to hide the footer and toolbar
-st.markdown(
-    """
-    <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    
-    /* Hides Streamlit bottom embed footer and fullscreen buttons */
-    div[class*="stAppFooter"] {display: none !important;}
-    footer[data-testid="stFooter"] {display: none !important;}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Hide pages from sidebar navigation — admin is secret
-st.markdown("""
-<style>
-    [data-testid="stSidebarNav"] {display: none;}
-</style>
-""", unsafe_allow_html=True)
-
-# --- Config ---
-API_BASE_URL = os.environ.get("API_BASE_URL", "https://agrotech-api-ooi0.onrender.com/api/v1")
-try:
-    API_BASE_URL = st.secrets.get("API_BASE_URL", API_BASE_URL)
-except Exception:
-    pass
-
-
-
-st.markdown("""
-<style>
 /* =========================================================
    AGROTECH SYSTEM-AWARE THEME
-   Automatically follows user's system Light/Dark mode
+   Automatically follows the user's system Light/Dark mode
    ========================================================= */
-
-/* ---------- Theme Variables ---------- */
 
 :root {
     --app-bg: #ffffff;
@@ -98,10 +67,7 @@ st.markdown("""
     --warning-border: #ffc107;
 }
 
-/* ---------- DARK SYSTEM MODE ---------- */
-
 @media (prefers-color-scheme: dark) {
-
     :root {
         --app-bg: #0e1117;
         --text-color: #f5f5f5;
@@ -122,30 +88,15 @@ st.markdown("""
     }
 }
 
-
-/* ---------- Main Application ---------- */
-
 .stApp {
     background-color: var(--app-bg);
     color: var(--text-color);
 }
 
-
-/* ---------- General Text ---------- */
-
-.stApp p,
-.stApp h1,
-.stApp h2,
-.stApp h3,
-.stApp h4,
-.stApp h5,
-.stApp h6,
-.stApp label {
+.stApp p, .stApp h1, .stApp h2, .stApp h3,
+.stApp h4, .stApp h5, .stApp h6, .stApp label {
     color: var(--text-color);
 }
-
-
-/* ---------- Main Header ---------- */
 
 .main-header {
     background: linear-gradient(135deg, #2d5a27, #4a9e3f);
@@ -156,90 +107,63 @@ st.markdown("""
     margin-bottom: 20px;
 }
 
-.main-header h1,
-.main-header p {
+.main-header h1, .main-header p {
     color: white !important;
 }
-
-
-/* ---------- Farmer Chat Bubble ---------- */
 
 .farmer-bubble {
     background: var(--farmer-bg);
     color: var(--farmer-text);
-
     padding: 12px 16px;
     border-radius: 18px 18px 4px 18px;
     margin: 8px 0;
     margin-left: 20%;
 }
 
-.farmer-bubble strong,
-.farmer-bubble b {
+.farmer-bubble strong, .farmer-bubble b {
     color: var(--farmer-text);
 }
-
-
-/* ---------- Bot Chat Bubble ---------- */
 
 .bot-bubble {
     background: var(--bot-bg);
     color: var(--bot-text);
-
     padding: 12px 16px;
     border-radius: 18px 18px 18px 4px;
     margin: 8px 0;
     margin-right: 20%;
-
     border: 1px solid var(--border-color);
 }
 
-.bot-bubble strong,
-.bot-bubble b,
-.bot-bubble li {
+.bot-bubble strong, .bot-bubble b, .bot-bubble li {
     color: var(--bot-text);
 }
-
-
-/* ---------- Tool Badge ---------- */
 
 .tool-badge {
     background: #4a9e3f;
     color: white;
-
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 0.75em;
     margin-right: 4px;
 }
 
-
-/* ---------- Welcome Card ---------- */
-
 .welcome-card {
     background: var(--card-bg);
     color: var(--text-color);
-
     border-radius: 10px;
     padding: 20px;
     margin: 10px 0;
-
     border-left: 4px solid #4a9e3f;
 }
 
-.welcome-card h4,
-.welcome-card p {
+.welcome-card h4, .welcome-card p {
     color: var(--text-color);
 }
-
-
-/* ---------- Google Button ---------- */
 
 .google-btn {
     background: var(--bot-bg);
     border: 2px solid #4285f4;
     color: #4285f4;
-
     border-radius: 8px;
     padding: 10px;
     text-align: center;
@@ -249,9 +173,6 @@ st.markdown("""
     margin: 10px 0;
 }
 
-
-/* ---------- Divider ---------- */
-
 .divider-text {
     text-align: center;
     color: var(--secondary-text);
@@ -259,28 +180,19 @@ st.markdown("""
     font-size: 0.85em;
 }
 
-
-/* ---------- Data Warning Banner ---------- */
-
 .data-warning {
     background: var(--warning-bg);
     border-left: 4px solid var(--warning-border);
-
     padding: 10px 15px;
     border-radius: 4px;
     margin-bottom: 15px;
-
     font-size: 0.85em;
     color: var(--warning-text);
 }
 
-.data-warning strong,
-.data-warning a {
+.data-warning strong, .data-warning a {
     color: var(--warning-text);
 }
-
-
-/* ---------- Streamlit Sidebar ---------- */
 
 [data-testid="stSidebar"] {
     background-color: var(--app-bg);
@@ -295,9 +207,6 @@ st.markdown("""
     color: var(--text-color);
 }
 
-
-/* ---------- Inputs ---------- */
-
 .stTextInput input,
 .stNumberInput input,
 .stSelectbox div[data-baseweb="select"],
@@ -305,44 +214,55 @@ st.markdown("""
     color: var(--text-color);
 }
 
-
-/* ---------- Captions ---------- */
-
 .stCaption,
 [data-testid="stCaptionContainer"] {
     color: var(--secondary-text);
 }
 
-
-/* ---------- Accessibility: Forced High Contrast ---------- */
-
 @media (forced-colors: active) {
-
     .stApp {
         background: Canvas;
         color: CanvasText;
     }
-
-    .main-header,
-    .farmer-bubble,
-    .bot-bubble,
-    .welcome-card {
+    .main-header, .farmer-bubble, .bot-bubble, .welcome-card {
         background: Canvas;
         color: CanvasText;
         border: 1px solid CanvasText;
     }
-
     button {
         border: 1px solid ButtonText;
         background: ButtonFace;
         color: ButtonText;
     }
 }
-
 </style>
 """, unsafe_allow_html=True)
 
-# --- Session State Init ---
+
+# ─────────────────────────────────────────────
+# CACHED HELPERS
+# ─────────────────────────────────────────────
+
+@st.cache_data(ttl=60, show_spinner=False)
+def check_api_health() -> bool:
+    """Cached for 60s. Without the cache this fires a network request on
+    every single Streamlit rerun — i.e. every click and keystroke."""
+    try:
+        r = requests.get(f"{API_BASE_URL}/health", timeout=5)
+        return r.status_code == 200
+    except Exception:
+        return False
+
+
+def auth_headers() -> dict:
+    token = st.session_state.get("access_token")
+    return {"Authorization": f"Bearer {token}"} if token else {}
+
+
+# ─────────────────────────────────────────────
+# SESSION STATE INIT
+# ─────────────────────────────────────────────
+
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "access_token" not in st.session_state:
@@ -377,6 +297,75 @@ def _logout():
     for key in list(st.session_state.keys()):
         del st.session_state[key]
     st.rerun()
+
+
+# ─────────────────────────────────────────────
+# PASSWORD RESET SCREEN
+# Shown when the farmer arrives from the emailed link.
+# Must run before the login page.
+# ─────────────────────────────────────────────
+
+def show_reset_password_page(reset_token: str):
+    st.markdown(f"""
+    <div class="main-header">
+        <h1>{APP_TITLE}</h1>
+        <p>Choose a new password</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    new_pw = st.text_input(
+        "New password", type="password",
+        key="reset_new_pw", placeholder="At least 8 characters"
+    )
+    confirm_pw = st.text_input(
+        "Confirm new password", type="password",
+        key="reset_confirm_pw", placeholder="Repeat your new password"
+    )
+
+    if st.button("Update password", type="primary",
+                 use_container_width=True, key="reset_submit_btn"):
+        if not new_pw or not confirm_pw:
+            st.warning("⚠️ Please fill in both fields")
+        elif len(new_pw) < 8:
+            st.error("❌ Password must be at least 8 characters")
+        elif new_pw != confirm_pw:
+            st.error("❌ Passwords do not match")
+        else:
+            try:
+                response = requests.post(
+                    f"{API_BASE_URL}/auth/reset-password",
+                    json={"token": reset_token, "new_password": new_pw},
+                    timeout=60,
+                )
+                if response.status_code == 200:
+                    st.success(
+                        "✅ Password updated. You can now log in with your "
+                        "new password."
+                    )
+                    st.query_params.clear()
+                    st.session_state.reset_done = True
+                else:
+                    detail = response.json().get(
+                        "detail", "Could not reset password"
+                    )
+                    st.error(f"❌ {detail}")
+            except requests.exceptions.ConnectionError:
+                st.error("❌ Cannot connect to AgroTech API.")
+            except Exception as e:
+                st.error(f"❌ Error: {e}")
+
+    if st.session_state.get("reset_done"):
+        if st.button("← Back to login", use_container_width=True,
+                     key="reset_back_btn"):
+            del st.session_state.reset_done
+            st.query_params.clear()
+            st.rerun()
+
+
+_reset_token = st.query_params.get("reset_token")
+if _reset_token and not st.session_state.authenticated:
+    show_reset_password_page(_reset_token)
+    st.stop()
 
 
 # ─────────────────────────────────────────────
@@ -437,16 +426,11 @@ def show_auth_page():
     </div>
     """, unsafe_allow_html=True)
 
-    # --- Data Disclaimer Banner ---
     st.markdown("""
-    <div style="background: #fff3cd; border-left: 4px solid #ffc107;
-        padding: 10px 15px; border-radius: 4px; margin-bottom: 15px;
-        font-size: 0.85em; color: #856404;">
-        ⚠️ <strong>Important:</strong> Price forecasts and yield predictions are 
-        estimated based on seasonal patterns and agronomic models. 
+    <div class="data-warning">
+        ⚠️ <strong>Important:</strong> Price forecasts and yield predictions are
+        estimated based on seasonal patterns and agronomic models.
         Always verify prices with your local market before making sell decisions.
-        <a href="#report-price" style="color: #856404; font-weight: bold;">
-        📊 Help us improve — report your local price below.</a>
     </div>
     """, unsafe_allow_html=True)
 
@@ -458,16 +442,11 @@ def show_auth_page():
         st.markdown("### Welcome Back!")
 
         # Google Login - temporarily disabled due to OAuth issues
-        #st.markdown(f"""
-        #<a href="{backend_url}/api/v1/auth/google" target="_self" class="google-btn">
-        #    🔵 &nbsp; Continue with Google
-        #</a>
-        #""", unsafe_allow_html=True)
-
-        #st.markdown(
-        #    '<div class="divider-text">── or login with email ──</div>',
-        #    unsafe_allow_html=True
-        #)
+        # st.markdown(f"""
+        # <a href="{backend_url}/api/v1/auth/google" target="_self" class="google-btn">
+        #     🔵 &nbsp; Continue with Google
+        # </a>
+        # """, unsafe_allow_html=True)
 
         login_email = st.text_input(
             "Email", key="login_email",
@@ -506,20 +485,51 @@ def show_auth_page():
             else:
                 st.warning("⚠️ Please enter your email and password")
 
+        # ---------- Forgot password ----------
+        with st.expander("🔒 Forgot your password?"):
+            st.caption(
+                "Enter the email you signed up with and we'll send you a "
+                "link to choose a new password. The link expires in 30 minutes."
+            )
+            forgot_email = st.text_input(
+                "Your email address",
+                key="forgot_email",
+                placeholder="Enter your email"
+            )
+
+            if st.button("Send reset link", key="forgot_btn",
+                         use_container_width=True):
+                if not forgot_email:
+                    st.warning("⚠️ Please enter your email address")
+                else:
+                    try:
+                        with st.spinner("Sending reset link..."):
+                            requests.post(
+                                f"{API_BASE_URL}/auth/forgot-password",
+                                json={"email": forgot_email},
+                                timeout=60,
+                            )
+                        # Deliberately identical whatever the outcome —
+                        # a different message would reveal which emails
+                        # are registered.
+                        st.info(
+                            "📧 If an account exists for that email, we've sent "
+                            "a reset link. Check your inbox and spam folder."
+                        )
+                    except requests.exceptions.ConnectionError:
+                        st.error("❌ Cannot connect to AgroTech API.")
+                    except Exception as e:
+                        st.error(f"❌ Error: {e}")
+
     with tab2:
         st.markdown("### Create Your Account")
 
-        #Google Sign Up - temporarily disabled due to OAuth issues
-        #st.markdown(f"""
-        #<a href="{backend_url}/api/v1/auth/google" target="_self" class="google-btn">
-        #    🔵 &nbsp; Sign Up with Google
-        #</a>
-        #""", unsafe_allow_html=True)
-
-        #st.markdown(
-        #    '<div class="divider-text">── or sign up with email ──</div>',
-        #    unsafe_allow_html=True
-        #)
+        # Google Sign Up - temporarily disabled due to OAuth issues
+        # st.markdown(f"""
+        # <a href="{backend_url}/api/v1/auth/google" target="_self" class="google-btn">
+        #     🔵 &nbsp; Sign Up with Google
+        # </a>
+        # """, unsafe_allow_html=True)
 
         full_name = st.text_input(
             "Full Name", key="signup_name",
@@ -532,7 +542,7 @@ def show_auth_page():
         signup_password = st.text_input(
             "Password", type="password",
             key="signup_password",
-            placeholder="Min. 6 characters"
+            placeholder="Min. 8 characters"
         )
         confirm_password = st.text_input(
             "Confirm Password", type="password",
@@ -547,8 +557,8 @@ def show_auth_page():
                 st.warning("⚠️ Please fill in all fields")
             elif signup_password != confirm_password:
                 st.error("❌ Passwords do not match")
-            elif len(signup_password) < 6:
-                st.error("❌ Password must be at least 6 characters")
+            elif len(signup_password) < 8:
+                st.error("❌ Password must be at least 8 characters")
             else:
                 try:
                     response = requests.post(
@@ -583,21 +593,16 @@ if not st.session_state.authenticated:
     show_auth_page()
     st.stop()
 
+
 # ─────────────────────────────────────────────
 # MAIN APP (only shown after login)
 # ─────────────────────────────────────────────
 
-# ── Server Wake-up Check ──
 if "server_checked" not in st.session_state:
     with st.spinner("Connecting to AgroTech servers..."):
-        try:
-            health = requests.get(
-                f"{API_BASE_URL}/health",
-                timeout=60  # wait up to 60s for cold start
-            )
-            if health.status_code == 200:
-                st.session_state.server_checked = True
-        except Exception:
+        if check_api_health():
+            st.session_state.server_checked = True
+        else:
             st.warning(
                 "⏳ Server is starting up — this takes about 30 seconds. "
                 "Please wait..."
@@ -626,14 +631,13 @@ with st.sidebar:
 
     st.divider()
 
-    # Language preference
     st.markdown("### 🌐 Response Language")
+    _languages = ["english", "yoruba", "hausa", "igbo", "pidgin"]
     selected_language = st.selectbox(
         "AgroBot will respond in:",
-        ["english", "yoruba", "hausa", "igbo", "pidgin"],
-        index=["english", "yoruba", "hausa", "igbo", "pidgin"].index(
-            st.session_state.preferred_language
-        ),
+        _languages,
+        index=_languages.index(st.session_state.preferred_language)
+        if st.session_state.preferred_language in _languages else 0,
         key="language_selector"
     )
     if selected_language != st.session_state.preferred_language:
@@ -642,7 +646,6 @@ with st.sidebar:
 
     st.divider()
 
-    # Known context display
     st.markdown("### 🧠 What I Know About You")
     ctx = st.session_state.session_context
     if ctx.get("crop_type"):
@@ -658,7 +661,6 @@ with st.sidebar:
 
     st.divider()
 
-    # Quick action buttons
     st.markdown("### ⚡ Quick Questions")
     quick_questions = [
         "What's the best time to sell my crops?",
@@ -673,14 +675,10 @@ with st.sidebar:
 
     st.divider()
 
-    # API health check
-    try:
-        health = requests.get(f"{API_BASE_URL}/health", timeout=3)
-        if health.status_code == 200:
-            st.success("🟢 API Connected")
-        else:
-            st.error("🔴 API Error")
-    except Exception:
+    # Cached — see check_api_health()
+    if check_api_health():
+        st.success("🟢 API Connected")
+    else:
         st.error("🔴 API Offline")
 
     if st.button("🗑️ Clear Chat", use_container_width=True, key="clear_chat_btn"):
@@ -697,7 +695,8 @@ chat_container = st.container()
 
 with chat_container:
     if not st.session_state.messages:
-        first_name = st.session_state.full_name.split()[0] if st.session_state.full_name else "Farmer"
+        _name = st.session_state.full_name or "Farmer"
+        first_name = _name.split()[0] if _name.split() else "Farmer"
         st.markdown(f"""
         <div class="bot-bubble">
         👋 Hello <strong>{first_name}</strong>! I'm <strong>AgroBot</strong>,
@@ -796,6 +795,7 @@ with st.expander("📊 Report Your Local Market Price", expanded=False):
                         "farmer_id": st.session_state.farmer_id,
                         "notes": report_notes
                     },
+                    headers=auth_headers(),
                     timeout=15
                 )
                 if response.status_code == 200:
@@ -866,7 +866,8 @@ with st.expander("📸 Upload Crop Photo for Disease Detection", expanded=False)
                         f"{API_BASE_URL}/image/analyze",
                         files=files,
                         data=data,
-                        timeout=30
+                        headers=auth_headers(),
+                        timeout=60
                     )
 
                     if response.status_code == 200:
@@ -905,33 +906,33 @@ with st.expander("📸 Upload Crop Photo for Disease Detection", expanded=False)
 
                             reply = f"""📸 **Crop Photo Analysis Complete**
 
-                        🌱 **Crop Identified:** {crop_name.title()}
-                        🔍 **Issue:** {issue}
-                        📂 **Category:** {issue_category.title() if issue_category else 'Unknown'}
-                        📊 **Confidence:** {confidence:.0%}
-                        {severity_emoji} **Severity:** {severity.title() if severity else 'Unknown'}
-                        {urgency_emoji} **Urgency:** {urgency.title() if urgency else 'Medium'}
-                        📈 **Progression:** {progression.title() if progression else 'Unknown'}
-                        {spread_emoji} **Spread Risk:** {spread_risk.title() if spread_risk else 'Unknown'}
+🌱 **Crop Identified:** {crop_name.title()}
+🔍 **Issue:** {issue}
+📂 **Category:** {issue_category.title() if issue_category else 'Unknown'}
+📊 **Confidence:** {confidence:.0%}
+{severity_emoji} **Severity:** {severity.title() if severity else 'Unknown'}
+{urgency_emoji} **Urgency:** {urgency.title() if urgency else 'Medium'}
+📈 **Progression:** {progression.title() if progression else 'Unknown'}
+{spread_emoji} **Spread Risk:** {spread_risk.title() if spread_risk else 'Unknown'}
 
-                        **👁️ Symptoms Visible:**
-                        {chr(10).join(f"• {s}" for s in symptoms) if symptoms else "• See image"}
+**👁️ Symptoms Visible:**
+{chr(10).join(f"• {s}" for s in symptoms) if symptoms else "• See image"}
 
-                        **🎯 Affected Parts:** {', '.join(affected_parts) if affected_parts else 'Unknown'}
+**🎯 Affected Parts:** {', '.join(affected_parts) if affected_parts else 'Unknown'}
 
-                        **💊 Treatment:**
-                        {treatment}
+**💊 Treatment:**
+{treatment}
 
-                        **🛡️ Prevention:**
-                        {prevention}
+**🛡️ Prevention:**
+{prevention}
 
-                        **📉 Yield Impact if Untreated:** {yield_impact}
+**📉 Yield Impact if Untreated:** {yield_impact}
 
-                        **👨‍⚕️ When to Seek Expert Help:**
-                        {when_expert if when_expert else 'Contact your local agricultural extension officer if symptoms worsen'}"""
+**👨‍⚕️ When to Seek Expert Help:**
+{when_expert if when_expert else 'Contact your local agricultural extension officer if symptoms worsen'}"""
 
                             if possible_causes:
-                                reply += f"\n\n**🔄 Other Possible Causes:**\n"
+                                reply += "\n\n**🔄 Other Possible Causes:**\n"
                                 reply += "\n".join(f"• {c}" for c in possible_causes)
 
                             if visual_evidence:
@@ -968,10 +969,9 @@ voice_col1, voice_col2 = st.columns([3, 1])
 with voice_col2:
     voice_lang = st.selectbox(
         "Language",
-        ["english", "yoruba", "hausa", "igbo", "pidgin"],
-        index=["english", "yoruba", "hausa", "igbo", "pidgin"].index(
-            st.session_state.preferred_language
-        ),
+        _languages,
+        index=_languages.index(st.session_state.preferred_language)
+        if st.session_state.preferred_language in _languages else 0,
         key="voice_lang_select",
         label_visibility="collapsed"
     )
@@ -1167,7 +1167,8 @@ def send_message(user_input: str):
                     "farmer_id": st.session_state.farmer_id,
                     "preferred_language": st.session_state.preferred_language
                 },
-                timeout=90  # increased to handle cold starts
+                headers=auth_headers(),
+                timeout=90
             )
 
         if response.status_code == 200:
@@ -1202,7 +1203,7 @@ def send_message(user_input: str):
     except requests.exceptions.ConnectionError:
         st.session_state.messages.append({
             "role": "assistant",
-            "content": "⚠️ Cannot connect to the AgroTech API. Please make sure your FastAPI server is running.",
+            "content": "⚠️ Cannot connect to the AgroTech API. Please try again shortly.",
             "tools_used": []
         })
     except requests.exceptions.Timeout:

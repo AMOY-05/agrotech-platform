@@ -11,7 +11,7 @@ from loguru import logger
 DATABASE_URL = settings.database_url
 
 # Build engine kwargs based on database type.
-# IMPORTANT: connect_args must only be set once, in exactly one branch.
+# IMPORTANT: connect_args must be set in exactly one branch, never twice.
 engine_kwargs = {
     "echo": False,
     "future": True,
@@ -23,28 +23,26 @@ if "sqlite" in DATABASE_URL:
 
 elif "pooler" in DATABASE_URL or ":6543" in DATABASE_URL:
     # Behind a pgbouncer-style external pooler (Supabase pooler, Neon -pooler).
-    # The pooler does the pooling, so we must not pool again, and asyncpg's
-    # prepared-statement cache breaks in transaction-pooling mode.
+    # The pooler pools for us, and asyncpg's prepared-statement cache breaks
+    # in transaction-pooling mode.
     engine_kwargs["poolclass"] = NullPool
     engine_kwargs["connect_args"] = {"statement_cache_size": 0}
 
 else:
     # Direct Postgres connection (Render Postgres, Supabase :5432, etc).
-    # Keep a real pool — this is what removes the per-request connection cost.
+    # A real pool is what removes the per-request connection cost, and
+    # pool_pre_ping is what fixes "connection is closed" after idle periods.
     engine_kwargs.update(
         {
-            "pool_pre_ping": True,   # fixes "connection is closed" after idle
-            "pool_recycle": 280,     # retire connections before the server drops them
+            "pool_pre_ping": True,
+            "pool_recycle": 280,
             "pool_size": 5,
             "max_overflow": 10,
             "pool_timeout": 30,
         }
     )
 
-logger.info(
-    f"DB engine mode: "
-    f"{'sqlite' if 'sqlite' in DATABASE_URL else engine_kwargs.get('poolclass', 'pooled')}"
-)
+logger.info(f"DB engine configured: {list(engine_kwargs.keys())}")
 
 engine = create_async_engine(DATABASE_URL, **engine_kwargs)
 
