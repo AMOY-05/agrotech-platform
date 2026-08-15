@@ -185,7 +185,7 @@ async def google_callback(code: str, db: AsyncSession = Depends(get_db)):
         token = create_access_token({"sub": user.farmer_id, "email": user.email})
         streamlit_url = getattr(
             settings, "streamlit_app_url",
-            "https://agrotechintelligence.streamlit.app"
+            "https://agrotechintelligence.site"
         )
 
         logger.info(f"Google OAuth success: {email} → {user.farmer_id}")

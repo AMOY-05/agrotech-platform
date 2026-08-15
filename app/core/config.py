@@ -4,7 +4,7 @@ from typing import Optional
 
 
 class Settings(BaseSettings):
-    app_name: str = "AgroTech Intelligence Platform"
+    app_name: str = "AgroTech Intelligence"
     app_version: str = "1.0.0"
     debug: bool = False
     groq_api_key: str
@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     # Telegram Bot
     telegram_bot_token: Optional[str] = None
     
-    streamlit_app_url: str = "https://agrotechintelligence.streamlit.app"
+    streamlit_app_url: str = "https://agrotechintelligence.site"
 
     # New AI providers
     anthropic_api_key: Optional[str] = None
