@@ -6,25 +6,18 @@ import pandas as pd
 
 APP_TITLE = "🌾 AgroTech Intelligence"
 
-st.set_page_config(
-    page_title="AgroTech AI",
-    page_icon="🌾",
-    layout="centered",
-    menu_items={"Get help": None, "Report a bug": None, "About": None},
+st.set_page_config(page_title="AgroTech AI", page_icon="🌾", layout="centered",
 )
-
-def load_model():
-    """Placeholder model loader.
-
-    Replace this with the actual model-loading logic for your app if you
-    are using a local ML model.
-    """
-    return None
-
 
 @st.cache_resource
 def get_model():
-    return load_model()
+    try:
+        import importlib
+        tf = importlib.import_module("tensorflow")
+        return tf.keras.models.load_model("models/pest_cnn.h5")
+    except ModuleNotFoundError:
+        st.error("TensorFlow is not installed in this environment. Install it with: pip install tensorflow")
+        raise RuntimeError("TensorFlow is required to run the pest detection model.")
 
 @st.cache_data(ttl=1800)
 def fetch_weather(lat, lon):
