@@ -18,11 +18,7 @@ if "sqlite" in DATABASE_URL:
     engine_kwargs["connect_args"] = {"check_same_thread": False}
 
 engine = create_async_engine(
-    DATABASE_URL,
-    pool_pre_ping=True,    # test the connection before handing it out
-    pool_recycle=280,      # drop connections older than ~5 min
-    pool_size=5,
-    max_overflow=10, 
+    DATABASE_URL, 
     poolclass=NullPool,
     connect_args={"statement_cache_size": 0},
     **engine_kwargs)
