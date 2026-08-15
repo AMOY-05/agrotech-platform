@@ -4,12 +4,31 @@ from datetime import datetime
 import os
 import pandas as pd
 
+APP_TITLE = "🌾 AgroTech Intelligence"
+
 st.set_page_config(
-    page_title="AgroTech Intelligence",
-    page_icon="assets/logo.png",
-    layout="wide",
+    page_title="AgroTech AI",
+    page_icon="🌾",
+    layout="centered",
     menu_items={"Get help": None, "Report a bug": None, "About": None},
 )
+
+def load_model():
+    """Placeholder model loader.
+
+    Replace this with the actual model-loading logic for your app if you
+    are using a local ML model.
+    """
+    return None
+
+
+@st.cache_resource
+def get_model():
+    return load_model()
+
+@st.cache_data(ttl=1800)
+def fetch_weather(lat, lon):
+    return requests.get(...).json()
 
 st.markdown("""
 <style>
@@ -55,14 +74,6 @@ try:
     API_BASE_URL = st.secrets.get("API_BASE_URL", API_BASE_URL)
 except Exception:
     pass
-
-APP_TITLE = "🌾 AgroTech Intelligence"
-
-st.set_page_config(
-    page_title="AgroTech AI",
-    page_icon="🌾",
-    layout="centered"
-)
 
 
 
