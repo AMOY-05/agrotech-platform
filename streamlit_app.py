@@ -5,6 +5,8 @@ import os
 import pandas as pd
 
 APP_TITLE = "🌾 AgroTech Intelligence"
+LANGUAGE_OPTIONS = ["english", "yoruba", "hausa", "igbo", "pidgin"]
+_languages = LANGUAGE_OPTIONS
 
 st.set_page_config(
     page_title="AgroTech Intelligence",
@@ -260,6 +262,26 @@ def auth_headers() -> dict:
 
 
 # ─────────────────────────────────────────────
+# AUTH HELPERS
+# ─────────────────────────────────────────────
+
+def _set_auth_state(data: dict):
+    st.session_state.authenticated = True
+    st.session_state.access_token = data.get("access_token", "")
+    st.session_state.farmer_id = data.get("farmer_id", "")
+    st.session_state.full_name = data.get("full_name", "Farmer")
+    st.session_state.preferred_language = data.get("preferred_language", "english")
+    st.session_state.messages = []
+    st.session_state.session_context = {}
+
+    # Store in URL so refresh doesn't log out
+    st.query_params["token"] = data.get("access_token", "")
+    st.query_params["farmer_id"] = data.get("farmer_id", "")
+    st.query_params["name"] = data.get("full_name", "Farmer")
+    st.query_params["language"] = data.get("preferred_language", "english")
+
+
+# ─────────────────────────────────────────────
 # SESSION STATE INIT
 # ─────────────────────────────────────────────
 
@@ -303,25 +325,6 @@ if not st.session_state.authenticated:
                 st.rerun()
         except Exception:
             pass
-
-# ─────────────────────────────────────────────
-# AUTH HELPERS
-# ─────────────────────────────────────────────
-
-def _set_auth_state(data: dict):
-    st.session_state.authenticated = True
-    st.session_state.access_token = data.get("access_token", "")
-    st.session_state.farmer_id = data.get("farmer_id", "")
-    st.session_state.full_name = data.get("full_name", "Farmer")
-    st.session_state.preferred_language = data.get("preferred_language", "english")
-    st.session_state.messages = []
-    st.session_state.session_context = {}
-
-    # Store in URL so refresh doesn't log out
-    st.query_params["token"] = data.get("access_token", "")
-    st.query_params["farmer_id"] = data.get("farmer_id", "")
-    st.query_params["name"] = data.get("full_name", "Farmer")
-    st.query_params["language"] = data.get("preferred_language", "english")
 
 
 def _logout():
