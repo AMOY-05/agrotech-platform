@@ -278,6 +278,31 @@ if "messages" not in st.session_state:
 if "session_context" not in st.session_state:
     st.session_state.session_context = {}
 
+# Persist auth across refreshes using query params
+if not st.session_state.authenticated:
+    params = st.query_params
+    token = params.get("token")
+    farmer_id = params.get("farmer_id")
+    name = params.get("name", "Farmer")
+    language = params.get("language", "english")
+    if token and farmer_id:
+        try:
+            verify_response = requests.get(
+                f"{API_BASE_URL}/auth/me",
+                params={"token": token},
+                timeout=15
+            )
+            if verify_response.status_code == 200:
+                profile = verify_response.json()
+                _set_auth_state({
+                    "access_token": token,
+                    "farmer_id": profile.get("farmer_id", farmer_id),
+                    "full_name": profile.get("full_name", name),
+                    "preferred_language": profile.get("preferred_language", language)
+                })
+                st.rerun()
+        except Exception:
+            pass
 
 # ─────────────────────────────────────────────
 # AUTH HELPERS
@@ -292,8 +317,15 @@ def _set_auth_state(data: dict):
     st.session_state.messages = []
     st.session_state.session_context = {}
 
+    # Store in URL so refresh doesn't log out
+    st.query_params["token"] = data.get("access_token", "")
+    st.query_params["farmer_id"] = data.get("farmer_id", "")
+    st.query_params["name"] = data.get("full_name", "Farmer")
+    st.query_params["language"] = data.get("preferred_language", "english")
+
 
 def _logout():
+    st.query_params.clear()
     for key in list(st.session_state.keys()):
         del st.session_state[key]
     st.rerun()
@@ -632,16 +664,18 @@ with st.sidebar:
     st.divider()
 
     st.markdown("### 🌐 Response Language")
-    _languages = ["english", "yoruba", "hausa", "igbo", "pidgin"]
     selected_language = st.selectbox(
-        "AgroBot will respond in:",
-        _languages,
-        index=_languages.index(st.session_state.preferred_language)
-        if st.session_state.preferred_language in _languages else 0,
-        key="language_selector"
+    "AgroBot will respond in:",
+    ["english", "yoruba", "hausa", "igbo", "pidgin"],
+    index=["english", "yoruba", "hausa", "igbo", "pidgin"].index(
+        st.session_state.preferred_language
+    ),
+    key="language_selector"
     )
     if selected_language != st.session_state.preferred_language:
         st.session_state.preferred_language = selected_language
+        # Update URL param too
+        st.query_params["language"] = selected_language
         st.success(f"✅ Language set to {selected_language.title()}")
 
     st.divider()
@@ -1156,18 +1190,14 @@ def send_message(user_input: str):
     })
 
     try:
-        with st.spinner(
-            "AgroBot is thinking... "
-            "(first response may take 30-60 seconds if server just woke up)"
-        ):
+        with st.spinner("AgroBot is thinking..."):
             response = requests.post(
                 f"{API_BASE_URL}/agent/chat",
                 json={
                     "message": user_input,
                     "farmer_id": st.session_state.farmer_id,
-                    "preferred_language": st.session_state.preferred_language
+                    "preferred_language": st.session_state.preferred_language  # ← ensure this is here
                 },
-                headers=auth_headers(),
                 timeout=90
             )
 
