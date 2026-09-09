@@ -56,12 +56,6 @@ async def ping():
     """Lightweight ping endpoint for uptime monitoring."""
     return {"status": "alive", "timestamp": datetime.utcnow().isoformat()}
 
-@router.get("/memory-stats", tags=["System"])
-async def memory_stats():
-    """Shows ChromaDB vector memory statistics."""
-    from app.services.vector_memory import get_memory_stats
-    return get_memory_stats()
-
 @router.get("/ping", tags=["System"])
 async def ping():
     """Lightweight ping for cron job keep-alive."""

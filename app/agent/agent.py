@@ -1,7 +1,6 @@
 import re
 import json
 from groq import Groq
-from llama_index.llms.nvidia import NVIDIA
 from requests import session
 from app.agent.redis_memory import save_session_redis
 from app.core.config import settings
@@ -9,18 +8,10 @@ from app.agent.tools import AGENT_TOOLS, run_tool
 from app.agent.memory import get_session, extract_and_update_context, FarmerSession
 from app.services.claude_service import ask_claude, AGROTECH_SYSTEM_PROMPT
 from loguru import logger
-from app.services.vector_memory import (
-    retrieve_farmer_memories,
-    update_farmer_profile,
-    store_disease_detection,
-    store_market_activity,
-    get_farmer_summary
-)
 
 
 # Keep Groq for tool calling (Claude tool calling has different API)
 groq_client = Groq(api_key=settings.groq_api_key)
-nvidia_client = NVIDIA(api_key=settings.nvidia_api_key)
 
 KNOWN_TOOLS = {
     "detect_pest_disease", "forecast_price",
@@ -30,21 +21,12 @@ KNOWN_TOOLS = {
 MAX_TOOL_ROUNDS = 3
 
 
-def _build_system_prompt(session: FarmerSession, farmer_id: str) -> str:
-    """Builds personalized system prompt with short + long term memory."""
-    base = AGROTECH_SYSTEM_PROMPT
-
-    # Short-term context (Redis session)
+def _build_system_prompt(session: FarmerSession) -> str:
+    """Builds personalized system prompt with farmer context."""
     context_summary = session.get_context_summary()
     if context_summary:
-        base += f"\n\n{context_summary}"
-
-    # Long-term memory (ChromaDB)
-    long_term = get_farmer_summary(farmer_id)
-    if long_term:
-        base += f"\n\nLong-term farmer history:\n{long_term}"
-
-    return base
+        return AGROTECH_SYSTEM_PROMPT + f"\n\n{context_summary}\n"
+    return AGROTECH_SYSTEM_PROMPT
 
 
 def _sanitize_reply(content: str) -> str:
@@ -80,24 +62,24 @@ async def run_agent(
     if crop_context:
         session.update_context(crop_type=crop_context)
 
-    system_prompt = _build_system_prompt(session, farmer_id)
+    system_prompt = _build_system_prompt(session)
 
-    # Build conversation for NVIDIA tool calling
-    nvidia_messages = [{"role": "system", "content": system_prompt}]
-    nvidia_messages.extend(session.messages)
-    nvidia_messages.append({"role": "user", "content": user_message})
+    # Build conversation for Groq tool calling
+    groq_messages = [{"role": "system", "content": system_prompt}]
+    groq_messages.extend(session.messages)
+    groq_messages.append({"role": "user", "content": user_message})
 
     tools_used = []
     tool_results_summary = []
 
     try:
-        # ── Phase 1: Tool Calling via NVIDIA ──
+        # ── Phase 1: Tool Calling via Groq ──
         for round_num in range(MAX_TOOL_ROUNDS):
             logger.info(f"Agent [{farmer_id}]: tool round {round_num + 1}")
 
-            response = nvidia_client.chat.completions.create(
-                model="riva-translate-4b-instruct-v2",
-                messages=nvidia_messages,
+            response = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=groq_messages,
                 tools=AGENT_TOOLS,
                 tool_choice="auto",
                 temperature=0.3,
@@ -115,7 +97,7 @@ async def run_agent(
                 break
 
             # Execute tool calls
-            nvidia_messages.append(response_message)
+            groq_messages.append(response_message)
 
             for tool_call in response_message.tool_calls:
                 tool_name = tool_call.function.name
@@ -125,7 +107,7 @@ async def run_agent(
                     logger.warning(
                         f"Agent [{farmer_id}]: unknown tool '{tool_name}'"
                     )
-                    nvidia_messages.append({
+                    groq_messages.append({
                         "role": "tool",
                         "tool_call_id": tool_call.id,
                         "content": json.dumps({
@@ -149,30 +131,6 @@ async def run_agent(
                 )
 
                 tool_result = await run_tool(tool_name, tool_args)
-                # Store important events in long-term memory
-                if tool_name == "detect_pest_disease" and tool_result:
-                    try:
-                        store_disease_detection(
-                            farmer_id=farmer_id,
-                            crop_type=tool_args.get("crop_type", "unknown"),
-                            disease=tool_result.get("detected_issue", "unknown"),
-                            urgency=tool_result.get("urgency", "medium"),
-                            treatment=tool_result.get("treatment", "")
-                        )
-                    except Exception:
-                        pass
-
-                elif tool_name == "forecast_price" and tool_result:
-                    try:
-                        store_market_activity(
-                            farmer_id=farmer_id,
-                            crop_type=tool_args.get("crop_type", "unknown"),
-                            region=tool_args.get("region", "unknown"),
-                            price=tool_result.get("current_price_ngn", 0),
-                            action="price check"
-                        )
-                    except Exception:
-                        pass
                 tools_used.append(tool_name)
                 tool_results_summary.append({
                     "tool": tool_name,
@@ -180,7 +138,7 @@ async def run_agent(
                     "result": tool_result
                 })
 
-                nvidia_messages.append({
+                groq_messages.append({
                     "role": "tool",
                     "tool_call_id": tool_call.id,
                     "content": json.dumps(tool_result)
@@ -333,8 +291,8 @@ async def run_agent(
         for round_num in range(MAX_TOOL_ROUNDS):
             logger.info(f"Agent [{farmer_id}]: round {round_num + 1}")
 
-            response = nvidia_client.chat.completions.create(
-                model="riva-translate-4b-instruct-v2",
+            response = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
                 messages=messages,
                 tools=AGENT_TOOLS,
                 tool_choice="auto",
@@ -412,8 +370,8 @@ async def run_agent(
 
         # --- Hit max rounds, force final answer ---
         logger.warning(f"Agent [{farmer_id}]: hit max tool rounds, forcing final answer")
-        final_response = nvidia_client.chat.completions.create(
-            model="riva-translate-4b-instruct-v2",
+        final_response = groq_client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
             messages=messages,
             temperature=0.7,
             max_tokens=700

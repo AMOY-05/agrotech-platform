@@ -1,5 +1,4 @@
 from groq import Groq
-from nvidia import NVIDIA
 from app.core.config import settings
 from loguru import logger
 from typing import Optional
@@ -7,9 +6,6 @@ from typing import Optional
 # Initialize Groq Client once - reused across all requests
 
 client = Groq(api_key=settings.groq_api_key)
-
-# Initialize NVIDIA Client once - reused across all requests
-nvidia_client = NVIDIA(api_key=settings.nvidia_api_key)
 
 AGRO_SYSTEM_PROMPT = """
 You are AgroBot, an expert AI assistant for Nigerian farmers. 
@@ -37,14 +33,14 @@ async def ask_llm(
     max_tokens: int =500
 ) -> str:
   """
-  Core function to send a message to LLM and get a response.
+  Core function to send a message to Groq LLM and get a response.
   Used by all routes that need LLM intelligence.
   """
   try:
-    logger.info(f"Sending to LLM: {user_message[:80]}...")
+    logger.info(f"Sending to Groq: {user_message[:80]}...")
 
     response = client.chat.completions.create(
-      model="riva-translate-4b-instruct-v2",
+      model="llama-3.3-70b-versatile",
       messages=[
         {
           "role": "system",
@@ -60,11 +56,11 @@ async def ask_llm(
     )
 
     reply = response.choices[0].message.content
-    logger.info(f"LLM responded: {reply[:80]}...")
+    logger.info(f"Groq responded: {reply[:80]}...")
     return reply
   
   except Exception as e:
-    logger.error(f"LLM error: {e}")
+    logger.error(f"Groq LLM error: {e}")
     raise Exception(f"LLM service unavailable: {str(e)}")
   
 
