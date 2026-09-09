@@ -11,6 +11,38 @@ async def data_quality():
     """Shows what real data sources are available."""
     return get_data_quality_report()
 
+
+@router.get("/cache-stats", tags=["System"])
+async def cache_stats():
+    """Shows cache statistics."""
+    from app.agent.redis_memory import get_redis
+    redis = get_redis()
+
+    if not redis:
+        return {"redis": "not connected", "cache": "in-memory fallback"}
+
+    try:
+        # Count cached items by type
+        weather_keys = redis.keys("agrotech:cache:weather:*") or []
+        forecast_keys = redis.keys("agrotech:cache:forecast:*") or []
+        price_keys = redis.keys("agrotech:cache:price:*") or []
+        location_keys = redis.keys("agrotech:cache:location:*") or []
+
+        return {
+            "redis": "connected",
+            "cached_items": {
+                "weather": len(weather_keys),
+                "forecasts": len(forecast_keys),
+                "prices": len(price_keys),
+                "locations": len(location_keys),
+                "total": len(weather_keys) + len(forecast_keys) +
+                         len(price_keys) + len(location_keys)
+            }
+        }
+    except Exception as e:
+        return {"redis": "error", "detail": str(e)}
+
+
 @router.get("/health", response_model=HealthResponse, tags=["System"])
 async def health_check():
   return HealthResponse(
@@ -23,8 +55,6 @@ async def health_check():
 async def ping():
     """Lightweight ping endpoint for uptime monitoring."""
     return {"status": "alive", "timestamp": datetime.utcnow().isoformat()}
-
-from datetime import datetime
 
 @router.get("/ping", tags=["System"])
 async def ping():

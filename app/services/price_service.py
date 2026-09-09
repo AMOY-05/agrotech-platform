@@ -11,6 +11,11 @@ from typing import Optional
 # Import real data service
 from app.services.real_data_service import get_real_price_forecast
 
+from app.services.cache_service import (
+    cache_get, cache_set,
+    get_price_cache_key, PRICE_TTL
+)
+
 # Fallback synthetic data (kept for crops not in WFP dataset)
 SEASONAL_PATTERN = {
     1: 1.15, 2: 1.20, 3: 1.10, 4: 0.95, 5: 0.90,
@@ -70,11 +75,16 @@ async def forecast_crop_price(
     region: str,
     forecast_days: int = 14
 ) -> dict:
-    """
-    Main price forecasting function.
-    Uses real WFP data as primary source.
-    """
+    """Price forecast — cached for 1 hour."""
     canonical_crop = _normalize_crop(crop_type)
+    cache_key = get_price_cache_key(canonical_crop, region)
+
+    # Check cache
+    cached = await cache_get(cache_key)
+    if cached:
+        logger.info(f"Price cache hit: {canonical_crop} in {region}")
+        return cached
+
     logger.info(
         f"Forecasting price: crop={canonical_crop}, "
         f"region={region}, days={forecast_days}"
@@ -86,17 +96,17 @@ async def forecast_crop_price(
     )
 
     if real_forecast and real_forecast.get("is_real_data"):
-        logger.info(
-            f"Using real WFP price data for {canonical_crop} in {region}"
-        )
-        return real_forecast
+        result = real_forecast
+    else:
+        result = _synthetic_forecast(canonical_crop, region, forecast_days)
 
-    # Fallback to seasonal model
-    logger.warning(
-        f"No real price data for {canonical_crop} in {region} "
-        f"— using seasonal estimate"
+    # Cache result
+    await cache_set(cache_key, result, PRICE_TTL)
+    logger.info(
+        f"Price cached: {canonical_crop} in {region} "
+        f"→ ₦{result['current_price_ngn']:.0f}/kg"
     )
-    return _synthetic_forecast(canonical_crop, region, forecast_days)
+    return result
 
 
 def _synthetic_forecast(

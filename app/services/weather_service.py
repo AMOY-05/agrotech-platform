@@ -2,6 +2,11 @@ import httpx
 from app.core.config import settings
 from loguru import logger
 from typing import Optional
+from app.services.cache_service import (
+    cache_get, cache_set,
+    get_weather_cache_key, get_forecast_cache_key,
+    WEATHER_TTL
+)
 
 OPENWEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5"
 
@@ -41,21 +46,26 @@ def resolve_region_to_city(region: str) -> str:
 
 
 async def get_current_weather(region: str) -> dict:
-    """
-    Fetches current weather conditions for a Nigerian region.
-    Returns temperature, humidity, rainfall, and conditions.
-    """
+    """Fetches current weather — cached for 30 minutes."""
+    cache_key = get_weather_cache_key(region)
+
+    # Check cache first
+    cached = await cache_get(cache_key)
+    if cached:
+        logger.info(f"Weather cache hit for {region}")
+        return cached
+
     city = resolve_region_to_city(region)
-    logger.info(f"Fetching weather for: {city}")
+    logger.info(f"Fetching live weather for: {city}")
 
     try:
-        client = await get_http_client()    
+        client = await get_http_client()
         response = await client.get(
             f"{OPENWEATHER_BASE_URL}/weather",
             params={
                 "q": city,
                 "appid": settings.openweather_api_key,
-                "units": "metric"  # Celsius, not Fahrenheit
+                "units": "metric"
             }
         )
         response.raise_for_status()
@@ -71,27 +81,37 @@ async def get_current_weather(region: str) -> dict:
             "wind_speed_ms": data["wind"]["speed"]
         }
 
-        logger.info(f"Weather fetched: {result['temperature_celsius']}°C, {result['humidity_percent']}% humidity")
+        # Cache the result
+        await cache_set(cache_key, result, WEATHER_TTL)
+        logger.info(
+            f"Weather cached for {region}: "
+            f"{result['temperature_celsius']}°C"
+        )
         return result
 
     except httpx.HTTPStatusError as e:
-        logger.error(f"OpenWeather API error: {e.response.status_code} — {e.response.text}")
-        raise Exception(f"Could not fetch weather for {region}: API returned {e.response.status_code}")
+        logger.error(f"OpenWeather API error: {e.response.status_code}")
+        raise Exception(f"Could not fetch weather for {region}")
     except httpx.RequestError as e:
         logger.error(f"OpenWeather request failed: {e}")
         raise Exception(f"Weather service unavailable: {str(e)}")
     except KeyError as e:
-        logger.error(f"Unexpected weather API response format: {e}")
+        logger.error(f"Unexpected weather API response: {e}")
         raise Exception("Weather data format error")
 
 
 async def get_5day_forecast(region: str) -> dict:
-    """
-    Fetches 5-day weather forecast — useful for yield prediction
-    (predicted rainfall) and sell-timing advice (weather affecting transport/storage).
-    """
+    """Fetches 5-day forecast — cached for 30 minutes."""
+    cache_key = get_forecast_cache_key(region)
+
+    # Check cache first
+    cached = await cache_get(cache_key)
+    if cached:
+        logger.info(f"Forecast cache hit for {region}")
+        return cached
+
     city = resolve_region_to_city(region)
-    logger.info(f"Fetching 5-day forecast for: {city}")
+    logger.info(f"Fetching live 5-day forecast for: {city}")
 
     try:
         client = await get_http_client()
@@ -106,7 +126,6 @@ async def get_5day_forecast(region: str) -> dict:
         response.raise_for_status()
         data = response.json()
 
-        # OpenWeather gives 3-hour intervals — we summarize into daily averages
         daily_summary = {}
         for entry in data["list"]:
             date = entry["dt_txt"].split(" ")[0]
@@ -117,30 +136,43 @@ async def get_5day_forecast(region: str) -> dict:
                     "conditions": []
                 }
             daily_summary[date]["temps"].append(entry["main"]["temp"])
-            daily_summary[date]["rainfall"] += entry.get("rain", {}).get("3h", 0)
-            daily_summary[date]["conditions"].append(entry["weather"][0]["main"])
+            daily_summary[date]["rainfall"] += entry.get(
+                "rain", {}
+            ).get("3h", 0)
+            daily_summary[date]["conditions"].append(
+                entry["weather"][0]["main"]
+            )
 
         forecast = []
         for date, info in list(daily_summary.items())[:5]:
             forecast.append({
                 "date": date,
-                "avg_temp_celsius": round(sum(info["temps"]) / len(info["temps"]), 1),
+                "avg_temp_celsius": round(
+                    sum(info["temps"]) / len(info["temps"]), 1
+                ),
                 "total_rainfall_mm": round(info["rainfall"], 1),
-                "dominant_condition": max(set(info["conditions"]), key=info["conditions"].count)
+                "dominant_condition": max(
+                    set(info["conditions"]),
+                    key=info["conditions"].count
+                )
             })
 
-        logger.info(f"5-day forecast fetched: {len(forecast)} days for {city}")
-        return {
+        result = {
             "region": region,
             "city_resolved": city,
             "forecast": forecast
         }
 
+        # Cache the result
+        await cache_set(cache_key, result, WEATHER_TTL)
+        logger.info(f"Forecast cached for {region}: {len(forecast)} days")
+        return result
+
     except httpx.HTTPStatusError as e:
         logger.error(f"OpenWeather forecast error: {e.response.status_code}")
-        raise Exception(f"Could not fetch forecast for {region}: API returned {e.response.status_code}")
+        raise Exception(f"Could not fetch forecast for {region}")
     except httpx.RequestError as e:
-        logger.error(f"OpenWeather forecast request failed: {e}")
+        logger.error(f"Forecast request failed: {e}")
         raise Exception(f"Forecast service unavailable: {str(e)}")
 
 async def get_estimated_monthly_rainfall(region: str) -> float:
