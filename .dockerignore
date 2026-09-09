@@ -13,3 +13,5 @@ test_real_apis.py
 README.md
 .pytest_cache/
 # Note: data/real/ is NOT ignored — needed for production
+# Add this comment — data/chromadb is NOT ignored
+# data/chromadb/
