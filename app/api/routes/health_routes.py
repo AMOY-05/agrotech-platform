@@ -43,6 +43,12 @@ async def cache_stats():
         return {"redis": "error", "detail": str(e)}
 
 
+@router.get("/memory-stats", tags=["System"])
+async def memory_stats():
+    """Shows ChromaDB vector memory statistics."""
+    from app.services.vector_memory import get_memory_stats
+    return get_memory_stats()
+
 @router.get("/health", response_model=HealthResponse, tags=["System"])
 async def health_check():
   return HealthResponse(

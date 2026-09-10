@@ -59,6 +59,19 @@ async def extract_and_update_context(session: FarmerSession, user_message: str):
         extracted = json.loads(cleaned)
         session.update_context(**extracted)
 
+        # Update long-term memory profile
+        try:
+            from app.services.vector_memory import update_farmer_profile
+            update_farmer_profile(
+                farmer_id=session.farmer_id,
+                crop_type=extracted.get("crop_type"),
+                region=extracted.get("region"),
+                farm_size=extracted.get("farm_size_hectares"),
+                soil_type=extracted.get("soil_type")
+            )
+        except Exception:
+            pass
+
         # Save updated session to Redis
         save_session_redis(session)
 

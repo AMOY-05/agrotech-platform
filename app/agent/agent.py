@@ -8,6 +8,13 @@ from app.agent.tools import AGENT_TOOLS, run_tool
 from app.agent.memory import get_session, extract_and_update_context, FarmerSession
 from app.services.claude_service import ask_claude, AGROTECH_SYSTEM_PROMPT
 from loguru import logger
+from app.services.vector_memory import (
+    retrieve_farmer_memories,
+    update_farmer_profile,
+    store_disease_detection,
+    store_market_activity,
+    get_farmer_summary
+)
 
 
 # Keep Groq for tool calling (Claude tool calling has different API)
@@ -21,12 +28,21 @@ KNOWN_TOOLS = {
 MAX_TOOL_ROUNDS = 3
 
 
-def _build_system_prompt(session: FarmerSession) -> str:
-    """Builds personalized system prompt with farmer context."""
+def _build_system_prompt(session: FarmerSession, farmer_id: str) -> str:
+    """Builds personalized system prompt with short + long term memory."""
+    base = AGROTECH_SYSTEM_PROMPT
+
+    # Short-term context (Redis session)
     context_summary = session.get_context_summary()
     if context_summary:
-        return AGROTECH_SYSTEM_PROMPT + f"\n\n{context_summary}\n"
-    return AGROTECH_SYSTEM_PROMPT
+        base += f"\n\n{context_summary}"
+
+    # Long-term memory (ChromaDB)
+    long_term = get_farmer_summary(farmer_id)
+    if long_term:
+        base += f"\n\nLong-term farmer history:\n{long_term}"
+
+    return base
 
 
 def _sanitize_reply(content: str) -> str:
@@ -62,7 +78,7 @@ async def run_agent(
     if crop_context:
         session.update_context(crop_type=crop_context)
 
-    system_prompt = _build_system_prompt(session)
+    system_prompt = _build_system_prompt(session, farmer_id)
 
     # Build conversation for Groq tool calling
     groq_messages = [{"role": "system", "content": system_prompt}]
@@ -131,6 +147,31 @@ async def run_agent(
                 )
 
                 tool_result = await run_tool(tool_name, tool_args)
+
+                # Store important events in long-term memory
+                if tool_name == "detect_pest_disease" and tool_result:
+                    try:
+                        store_disease_detection(
+                            farmer_id=farmer_id,
+                            crop_type=tool_args.get("crop_type", "unknown"),
+                            disease=tool_result.get("detected_issue", "unknown"),
+                            urgency=tool_result.get("urgency", "medium"),
+                            treatment=tool_result.get("treatment", "")
+                        )
+                    except Exception:
+                        pass
+
+                elif tool_name == "forecast_price" and tool_result:
+                    try:
+                        store_market_activity(
+                            farmer_id=farmer_id,
+                            crop_type=tool_args.get("crop_type", "unknown"),
+                            region=tool_args.get("region", "unknown"),
+                            price=tool_result.get("current_price_ngn", 0),
+                            action="price check"
+                        )
+                    except Exception:
+                        pass
                 tools_used.append(tool_name)
                 tool_results_summary.append({
                     "tool": tool_name,
