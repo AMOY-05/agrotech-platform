@@ -59,10 +59,40 @@ def get_embedder():
     return _embedder
 
 
-def _embed(text: str) -> list:
-    """Creates embedding for text."""
-    embedder = get_embedder()
-    return embedder.encode(text).tolist()
+import httpx
+from app.core.config import settings
+
+NVIDIA_EMBED_URL = "https://integrate.api.nvidia.com/v1/embeddings"
+NVIDIA_EMBED_MODEL = "nvidia/nemotron-3-embed-1b"
+
+async def _embed(text: str, input_type: str = "passage") -> list:
+    """
+    Gets embedding from NVIDIA's hosted nemotron-3-embed-1b API.
+    input_type: 'passage' when storing memories, 'query' when searching.
+    """
+    if not settings.nvidia_api_key:
+        logger.error("NVIDIA_API_KEY not configured — cannot generate embeddings")
+        raise Exception("NVIDIA API key not configured")
+
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        response = await client.post(
+            NVIDIA_EMBED_URL,
+            headers={
+                "Authorization": f"Bearer {settings.nvidia_api_key}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "input": [text],
+                "model": NVIDIA_EMBED_MODEL,
+                "input_type": input_type,
+                "modality": "text",
+                "embedding_type": "float",
+                "encoding_format": "float"
+            }
+        )
+        response.raise_for_status()
+        data = response.json()
+        return data["data"][0]["embedding"]
 
 
 def store_farmer_memory(

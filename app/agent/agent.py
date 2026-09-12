@@ -94,7 +94,7 @@ async def run_agent(
             logger.info(f"Agent [{farmer_id}]: tool round {round_num + 1}")
 
             response = groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model="openai/gpt-oss-120b",
                 messages=groq_messages,
                 tools=AGENT_TOOLS,
                 tool_choice="auto",
@@ -333,7 +333,7 @@ async def run_agent(
             logger.info(f"Agent [{farmer_id}]: round {round_num + 1}")
 
             response = groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model="openai/gpt-oss-120b",
                 messages=messages,
                 tools=AGENT_TOOLS,
                 tool_choice="auto",
@@ -412,7 +412,7 @@ async def run_agent(
         # --- Hit max rounds, force final answer ---
         logger.warning(f"Agent [{farmer_id}]: hit max tool rounds, forcing final answer")
         final_response = groq_client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             messages=messages,
             temperature=0.7,
             max_tokens=700

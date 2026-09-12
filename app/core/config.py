@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     debug: bool = False
     groq_api_key: str
     openweather_api_key: str
-    nvidia_api_key: str
+    nvidia_api_key: Optional[str] = None
 
     # Database
     database_url: str = "sqlite+aiosqlite:///./agrotech.db"

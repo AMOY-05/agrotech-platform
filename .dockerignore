@@ -15,3 +15,6 @@ README.md
 # Note: data/real/ is NOT ignored — needed for production
 # Add this comment — data/chromadb is NOT ignored
 # data/chromadb/
+
+agrotech.db
+agrotech.yaml
