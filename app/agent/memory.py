@@ -62,7 +62,7 @@ async def extract_and_update_context(session: FarmerSession, user_message: str):
         # Update long-term memory profile
         try:
             from app.services.vector_memory import update_farmer_profile
-            update_farmer_profile(
+            await update_farmer_profile(
                 farmer_id=session.farmer_id,
                 crop_type=extracted.get("crop_type"),
                 region=extracted.get("region"),
